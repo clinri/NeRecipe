@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="common_spacing">12dp</dimen>
+    <dimen name="font_category">16dp</dimen>
+    <dimen name="font_author">20dp</dimen>
+    <dimen name="font_title_recipe">28dp</dimen>
+    <dimen name="fab_margin">15dp</dimen>
+</resources>
