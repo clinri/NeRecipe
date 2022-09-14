@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/all_recipes"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.FeedRecipesFragment">
@@ -10,15 +11,26 @@
         android:id="@+id/search_edit_frame"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:focusableInTouchMode="true"
         android:hint="@string/searchEditFrameText"
         android:padding="@dimen/common_spacing"
-        app:layout_constraintEnd_toStartOf="@id/filter_button"
+        app:layout_constraintEnd_toStartOf="@id/close_search_frame"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/close_search_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@id/search_edit_frame"
+        app:layout_constraintRight_toLeftOf="@id/filter_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_close_24dp" />
+
     <TextView
         android:id="@+id/test"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/common_spacing"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,8 +50,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/empty_image"
         app:layout_constraintTop_toBottomOf="@id/test"
         tools:listitem="@layout/recipe_item" />
+
+    <ImageView
+        android:id="@+id/empty_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@raw/empty_plate"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recipesRecyclerView" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

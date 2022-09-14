@@ -1,15 +1,15 @@
-package ru.netology.nmedia.viewModel
+package ru.netology.nerecipe.viewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import ru.netology.nerecipe.adapter.RecipesInteractionListener
 import ru.netology.nerecipe.dto.Recipe
-import ru.netology.nmedia.data.RecipesRepository
-import ru.netology.nmedia.data.impl.RecipesRepositoryImpl
+import ru.netology.nerecipe.data.RecipesRepository
+import ru.netology.nerecipe.data.impl.RecipesRepositoryImpl
 import ru.netology.nerecipe.db.AppDb
-import ru.netology.nmedia.util.ItemNotFoundExceptions
-import ru.netology.nmedia.util.SingleLiveEvent
+import ru.netology.nerecipe.util.ItemNotFoundExceptions
+import ru.netology.nerecipe.util.SingleLiveEvent
 
 open class RecipeViewModel(
     application: Application

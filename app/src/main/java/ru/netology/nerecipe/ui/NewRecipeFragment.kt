@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nerecipe.databinding.NewRecipeFragmentBinding
-import ru.netology.nmedia.util.StringArg
-import ru.netology.nmedia.viewModel.RecipeViewModel
+import ru.netology.nerecipe.util.StringArg
+import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class NewRecipeFragment : Fragment() {
 
@@ -20,7 +21,7 @@ class NewRecipeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = NewRecipeFragmentBinding.inflate(inflater, container, false)
-        val viewModel by viewModels<RecipeViewModel>()
+        val viewModel by viewModels<RecipeViewModel>(ownerProducer = ::requireParentFragment)
 
         arguments?.textArg.let(binding.edit::setText)
         binding.edit.requestFocus()
@@ -36,6 +37,7 @@ class NewRecipeFragment : Fragment() {
             }
             findNavController().navigateUp()
         }
+//        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return binding.root
     }
 

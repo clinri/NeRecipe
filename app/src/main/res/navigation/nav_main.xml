@@ -3,20 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@layout/feed_recipes_fragment">
-
+    app:startDestination="@id/feedRecipesFragment">
+    <fragment
+        android:id="@+id/feedRecipesFragment"
+        android:name="ru.netology.nerecipe.ui.FeedRecipesFragment"
+        android:label="feed_recipes_fragment"
+        tools:layout="@layout/feed_recipes_fragment" >
+        <action
+            android:id="@+id/action_feedRecipesFragment_to_newRecipeFragment"
+            app:destination="@id/newRecipeFragment" />
+        <action
+            android:id="@+id/action_feedRecipesFragment_to_feedFavoriteRecipesFragment"
+            app:destination="@id/feedFavoriteRecipesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/newRecipeFragment"
         android:name="ru.netology.nerecipe.ui.NewRecipeFragment"
         android:label="new_recipe_fragment"
-        tools:layout="@layout/new_recipe_fragment" />
+        tools:layout="@layout/new_recipe_fragment"/>
     <fragment
-        android:id="@+id/tabsFragment"
-        android:name="ru.netology.nerecipe.ui.TabsFragment"
-        android:label="tabs_fragment"
-        tools:layout="@layout/tabs_fragment" >
+        android:id="@+id/feedFavoriteRecipesFragment"
+        android:name="ru.netology.nerecipe.ui.FeedFavoriteRecipesFragment"
+        android:label="fragment_feed_favorite_recipes"
+        tools:layout="@layout/fragment_feed_favorite_recipes" >
         <action
-            android:id="@+id/action_tabsFragment_to_newRecipeFragment"
+            android:id="@+id/action_feedFavoriteRecipesFragment_to_newRecipeFragment"
             app:destination="@id/newRecipeFragment" />
     </fragment>
 </navigation>
