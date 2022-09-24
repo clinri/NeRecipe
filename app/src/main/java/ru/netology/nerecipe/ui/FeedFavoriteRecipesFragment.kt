@@ -14,6 +14,7 @@ import ru.netology.nerecipe.databinding.FragmentFeedFavoriteRecipesBinding
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class FeedFavoriteRecipesFragment : Fragment() {
+
     @SuppressLint("ResourceType")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,7 +28,7 @@ class FeedFavoriteRecipesFragment : Fragment() {
 
         val adapter = RecipesAdapter(viewModel)
         binding.feedLayout.recipesRecyclerView.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) { recipes ->
+        viewModel.sortedData.observe(viewLifecycleOwner) { recipes ->
             adapter.submitList(recipes)
             if (viewModel.data.value?.isEmpty()!!) {
                 binding.feedLayout.emptyImage.setImageResource(R.raw.empty_board)

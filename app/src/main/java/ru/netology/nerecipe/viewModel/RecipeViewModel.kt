@@ -1,13 +1,15 @@
 package ru.netology.nerecipe.viewModel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.netology.nerecipe.adapter.RecipesInteractionListener
-import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.data.RecipesRepository
 import ru.netology.nerecipe.data.impl.RecipesRepositoryImpl
 import ru.netology.nerecipe.db.AppDb
+import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.util.ItemNotFoundExceptions
 import ru.netology.nerecipe.util.SingleLiveEvent
 
@@ -18,6 +20,25 @@ open class RecipeViewModel(
         dao = AppDb.getInstanse(application).recipeDao
     )
     val data by repository::data
+    var orderSort = (data.value?.map
+    {
+        it.id
+    } ?: mutableListOf())
+    val sortedData = MutableLiveData(sortLiveData(data.value))
+
+    private fun sortLiveData(recipes: List<Recipe>?): List<Recipe> {
+        val result = mutableListOf<Recipe>()
+        if (orderSort.isNotEmpty()) {
+            orderSort.forEach {
+                if (recipes != null) {
+                    result.add((recipes[it]))
+                }
+            }
+        } else {
+            return result
+        }
+        return result
+    }
 
     val navigateToNewRecipeFragment = SingleLiveEvent<String?>()
     val navigateToSingleRecipeFragment = SingleLiveEvent<Int>()
@@ -32,7 +53,12 @@ open class RecipeViewModel(
             repository.updateContentById(
                 it.copy(title = title)
             )
-        } ?: repository.insert(
+        } ?: addRecipe(title)
+        currentRecipe.value = null
+    }
+
+    private fun addRecipe(title: String) {
+        repository.insert(
             Recipe( // new
                 id = RecipesRepository.NEW_RECIPE_ID,
                 category = "Russian",
@@ -40,16 +66,37 @@ open class RecipeViewModel(
                 title = title
             )
         )
-        currentRecipe.value = null
+        orderSort = mutableListOf(
+            checkNotNull(
+                data.value?.last()?.id
+            )
+        ) + orderSort
     }
 
-    //region RecipeInteractionListener
+//region RecipeInteractionListener
 
     override fun onFavoriteClicked(recipe: Recipe) =
         repository.favorite(recipe.id)
 
     override fun onRecipeClicked(recipe: Recipe) {
         navigateToSingleRecipeFragment.value = recipe.id
+    }
+
+    fun moveTo(item: Int, itemTarget: Int) {
+        Log.d("MoveTo", "перенос $item на позицию $itemTarget")
+        orderSort = orderSort.mapNotNull {
+            when (it) {
+                itemTarget -> {
+                    item
+                }
+                item -> {
+                    null
+                }
+                else -> {
+                    it
+                }
+            }
+        }
     }
 
     override fun onRemoveClicked(recipe: Recipe) =
@@ -67,7 +114,7 @@ open class RecipeViewModel(
     override fun onCancelEditClicked() {
         currentRecipe.value = null
     }
-    //endregion InteractionListener
+//endregion InteractionListener
 
     fun getRecipeById(recipeId: Int): Recipe {
         return data.value?.find { it.id == recipeId } ?: throw ItemNotFoundExceptions()

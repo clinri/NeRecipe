@@ -1,5 +1,6 @@
 package ru.netology.nerecipe.data.impl
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.data.RecipesRepository
@@ -20,7 +21,7 @@ class RecipesRepositoryImpl(
     }
 
     override fun updateContentById(recipe: Recipe) {
-        dao.updateContentById(recipe.id,recipe.title)
+        dao.updateContentById(recipe.id, recipe.title)
     }
 
     override fun favorite(recipeId: Int) {
