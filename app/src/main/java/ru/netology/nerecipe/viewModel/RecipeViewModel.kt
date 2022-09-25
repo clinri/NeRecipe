@@ -117,11 +117,10 @@ open class RecipeViewModel(
 
     fun moveTo(item: Int, itemTarget: Int) {
         Log.d("MoveTo", "перенос $item на позицию $itemTarget")
-        val indexItem = orderSort.indexOf(item)
-        val indexItemTarget = orderSort.indexOf(itemTarget)
         val newList = mutableListOf<Int>()
         newList.addAll(orderSort)
-        newList.add(indexItemTarget, item)
-        newList.remove(indexItem + 1)
+        newList.add(itemTarget, item)
+        newList.remove(item + 1)
+        orderSort = newList
     }
 }

@@ -61,7 +61,7 @@ class FeedRecipesFragment : Fragment() {
         }
         setupLongClickListener()
         val recyclerViewRecipes = binding.recipesRecyclerView
-        setupSwipeListener(recyclerViewRecipes)
+        setupMoveAndSwipeListener(recyclerViewRecipes)
         return binding.root
     }
 
@@ -71,18 +71,21 @@ class FeedRecipesFragment : Fragment() {
         }
     }
 
-    private fun setupSwipeListener(recyclerViewRecipes: RecyclerView) {
+    private fun setupMoveAndSwipeListener(recyclerViewRecipes: RecyclerView) {
         val callback = object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         ) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                val item = recipesAdapter.currentList[viewHolder.adapterPosition].id
-                val itemTarget = recipesAdapter.currentList[target.adapterPosition].id
-                viewModel.moveTo(item,itemTarget)
+                val item = viewHolder.layoutPosition
+                val itemTarget = target.layoutPosition
+                Log.d("move", "move from $item to $itemTarget")
+                recyclerView.adapter?.notifyItemMoved(item, itemTarget)
+                viewModel.moveTo(item, itemTarget)
                 return true
             }
 
