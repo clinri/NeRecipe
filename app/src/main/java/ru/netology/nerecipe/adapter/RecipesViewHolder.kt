@@ -7,7 +7,7 @@ import ru.netology.nerecipe.databinding.RecipeItemBinding
 import ru.netology.nerecipe.dto.Recipe
 
 class RecipesViewHolder(
-    val binding: RecipeItemBinding,
+    private val binding: RecipeItemBinding,
     listener: RecipesInteractionListener
 ):RecyclerView.ViewHolder(binding.root) {
     private lateinit var recipe: Recipe

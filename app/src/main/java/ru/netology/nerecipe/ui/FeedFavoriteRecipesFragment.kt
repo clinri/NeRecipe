@@ -28,9 +28,10 @@ class FeedFavoriteRecipesFragment : Fragment() {
 
         val adapter = RecipesAdapter(viewModel)
         binding.feedLayout.recipesRecyclerView.adapter = adapter
-        viewModel.sortedData.observe(viewLifecycleOwner) { recipes ->
-            adapter.submitList(recipes)
-            if (viewModel.data.value?.isEmpty()!!) {
+        viewModel.data.observe(viewLifecycleOwner) {
+            viewModel.updateSortData()
+            adapter.submitList(viewModel.sortedData)
+            if (viewModel.sortedData.isEmpty()) {
                 binding.feedLayout.emptyImage.setImageResource(R.raw.empty_board)
                 binding.feedLayout.emptyImage.visibility = View.VISIBLE
                 binding.feedLayout.recipesRecyclerView.visibility = View.GONE

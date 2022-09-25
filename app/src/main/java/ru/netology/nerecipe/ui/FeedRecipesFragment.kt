@@ -35,9 +35,10 @@ class FeedRecipesFragment : Fragment() {
         binding.test.text = "feed"
         recipesAdapter = RecipesAdapter(viewModel)
         binding.recipesRecyclerView.adapter = recipesAdapter
-        viewModel.sortedData.observe(viewLifecycleOwner) {
-            recipesAdapter.submitList(viewModel.sortedData.value)
-            if (viewModel.sortedData.value?.isEmpty()!!) {
+        viewModel.data.observe(viewLifecycleOwner) {
+            viewModel.updateSortData()
+            recipesAdapter.submitList(viewModel.sortedData)
+            if (viewModel.sortedData.isEmpty()) {
                 binding.emptyImage.visibility = View.VISIBLE
                 binding.recipesRecyclerView.visibility = View.GONE
             } else {
