@@ -19,8 +19,10 @@ open class RecipeViewModel(
         dao = AppDb.getInstance(application).recipeDao
     )
     val data by repository::data
-    private var orderSort: List<Int> = emptyList()
-    var sortedData: List<Recipe> = emptyList()
+    private var orderSort: MutableList<Int> = mutableListOf()
+    var sortedData: List<Recipe> = mutableListOf()
+    var needAddItemInOrderSort: Boolean = false
+    var lastSizeOrder = 0
 
     val navigateToNewRecipeFragment = SingleLiveEvent<String?>()
     val navigateToSingleRecipeFragment = SingleLiveEvent<Int>()
@@ -31,13 +33,23 @@ open class RecipeViewModel(
         if (orderSort.isEmpty()) {
             orderSort = data.value?.map {
                 it.id
-            } ?: emptyList()
+            }?.toMutableList() ?: mutableListOf()
         }
+        tryAddItemInOrderSort()
         sortedData = data.value?.let { sortByOrder(it, orderSort) }!!
     }
 
-    private fun sortByOrder(listRecipes: List<Recipe>, order: List<Int>): List<Recipe> =
-        listRecipes.map { order.indexOf(it.id) }.sorted().map { listRecipes[it] }
+    private fun sortByOrder(listRecipes: List<Recipe>, order: List<Int>): List<Recipe> {
+        println(listRecipes)
+        println()
+        println(order)
+        println()
+        return listRecipes.map { recipe ->
+            order.indexOf(recipe.id)
+        }.sorted().map { id ->
+            listRecipes[id]
+        }
+    }
 
     fun onSaveButtonClicked(title: String) {
         if (title.isBlank()) {
@@ -52,6 +64,7 @@ open class RecipeViewModel(
     }
 
     private fun addRecipe(title: String) {
+        lastSizeOrder = data.value?.size ?: 0
         repository.insert(
             Recipe( // new
                 id = RecipesRepository.NEW_RECIPE_ID,
@@ -60,11 +73,14 @@ open class RecipeViewModel(
                 title = title
             )
         )
-        orderSort = mutableListOf(
-            checkNotNull(
-                data.value?.last()?.id
-            )
-        ) + orderSort
+        needAddItemInOrderSort = true
+    }
+
+    private fun tryAddItemInOrderSort() {
+        if (needAddItemInOrderSort && (data.value?.size ?: 0) != lastSizeOrder) {
+            orderSort.add(0, checkNotNull(data.value?.first()?.id))
+            needAddItemInOrderSort = false
+        }
     }
 
 //region RecipeInteractionListener
@@ -76,8 +92,10 @@ open class RecipeViewModel(
         navigateToSingleRecipeFragment.value = recipe.id
     }
 
-    override fun onRemoveClicked(recipe: Recipe) =
+    override fun onRemoveClicked(recipe: Recipe) {
+        orderSort.remove(recipe.id)
         repository.delete(recipe.id)
+    }
 
     override fun onAddClicked() {
         navigateToNewRecipeFragment.value = null

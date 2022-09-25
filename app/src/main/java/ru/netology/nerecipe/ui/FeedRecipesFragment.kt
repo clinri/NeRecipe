@@ -51,9 +51,9 @@ class FeedRecipesFragment : Fragment() {
             findNavController()
                 .navigate(
                     R.id.action_feedRecipesFragment_to_newRecipeFragment,
-//                    Bundle().apply {
-//                        textArg = it
-//                    }
+                    Bundle().apply {
+                        textArg = it
+                    }
                 )
         }
         binding.fab.setOnClickListener {
