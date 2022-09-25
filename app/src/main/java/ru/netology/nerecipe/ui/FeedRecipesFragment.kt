@@ -81,8 +81,8 @@ class FeedRecipesFragment : Fragment() {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                val item = viewHolder.layoutPosition
-                val itemTarget = target.layoutPosition
+                val item = viewHolder.absoluteAdapterPosition
+                val itemTarget = target.absoluteAdapterPosition
                 Log.d("move", "move from $item to $itemTarget")
                 recyclerView.adapter?.notifyItemMoved(item, itemTarget)
                 viewModel.moveTo(item, itemTarget)
@@ -90,8 +90,8 @@ class FeedRecipesFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = recipesAdapter.currentList[viewHolder.adapterPosition]
-                viewModel.onRemoveClicked(item)
+                val item = viewHolder.layoutPosition
+                viewModel.onRemoveClicked(viewModel.sortedData[item])
             }
         }
         val itemTouchHelper = ItemTouchHelper(callback)
