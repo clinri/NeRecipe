@@ -1,5 +1,6 @@
 package ru.netology.nerecipe.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,27 +19,25 @@ import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class FeedRecipesFragment : Fragment() {
 
-    private lateinit var binding: FeedRecipesFragmentBinding
-    private lateinit var recipesAdapter: RecipesAdapter
     val viewModel by viewModels<RecipeViewModel>(ownerProducer = ::requireParentFragment)
 
+    @SuppressLint("ResourceType")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FeedRecipesFragmentBinding.inflate(inflater, container, false)
-
-
-//        arguments?.textArg?.let(binding.test::setText)
+        val binding = FeedRecipesFragmentBinding.inflate(inflater, container, false)
 
         binding.test.text = "feed"
-        recipesAdapter = RecipesAdapter(viewModel)
+
+        val recipesAdapter = RecipesAdapter(viewModel)
         binding.recipesRecyclerView.adapter = recipesAdapter
         viewModel.data.observe(viewLifecycleOwner) {
             viewModel.updateSortData()
             recipesAdapter.submitList(viewModel.sortedData)
             if (viewModel.sortedData.isEmpty()) {
+                binding.emptyImage.setImageResource(R.raw.empty_plate)
                 binding.emptyImage.visibility = View.VISIBLE
                 binding.recipesRecyclerView.visibility = View.GONE
             } else {
@@ -59,16 +58,10 @@ class FeedRecipesFragment : Fragment() {
         binding.fab.setOnClickListener {
             viewModel.onAddClicked()
         }
-        setupLongClickListener()
+//        setupMoveAndSwipeListener
         val recyclerViewRecipes = binding.recipesRecyclerView
         setupMoveAndSwipeListener(recyclerViewRecipes)
         return binding.root
-    }
-
-    private fun setupLongClickListener() {
-        recipesAdapter.onRecipeItemLongClickListener = {
-            Log.d("Long click", it.id.toString())
-        }
     }
 
     private fun setupMoveAndSwipeListener(recyclerViewRecipes: RecyclerView) {

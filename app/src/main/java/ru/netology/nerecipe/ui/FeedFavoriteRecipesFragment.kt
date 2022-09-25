@@ -2,18 +2,24 @@ package ru.netology.nerecipe.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipesAdapter
 import ru.netology.nerecipe.databinding.FragmentFeedFavoriteRecipesBinding
+import ru.netology.nerecipe.ui.FeedRecipesFragment.Companion.textArg
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class FeedFavoriteRecipesFragment : Fragment() {
+
+    val viewModel by viewModels<RecipeViewModel>(ownerProducer = ::requireParentFragment)
 
     @SuppressLint("ResourceType")
     override fun onCreateView(
@@ -22,7 +28,6 @@ class FeedFavoriteRecipesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentFeedFavoriteRecipesBinding.inflate(inflater, container, false)
-        val viewModel by viewModels<RecipeViewModel>(ownerProducer = ::requireParentFragment)
 
         binding.feedLayout.test.text = "favorite"
 
@@ -45,15 +50,45 @@ class FeedFavoriteRecipesFragment : Fragment() {
             findNavController()
                 .navigate(
                     R.id.action_feedFavoriteRecipesFragment_to_newRecipeFragment,
-//                    Bundle().apply {
-//                        textArg = it
-//                    }
+                    Bundle().apply {
+                        textArg = it
+                    }
                 )
         }
-
         binding.feedLayout.fab.setOnClickListener {
             viewModel.onAddClicked()
         }
+
+        //        setupMoveAndSwipeListener
+        val recyclerViewRecipes = binding.feedLayout.recipesRecyclerView
+        setupMoveAndSwipeListener(recyclerViewRecipes)
         return binding.root
+    }
+
+    private fun setupMoveAndSwipeListener(recyclerViewRecipes: RecyclerView) {
+        val callback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                val item = viewHolder.absoluteAdapterPosition
+                val itemTarget = target.absoluteAdapterPosition
+                Log.d("move", "move from $item to $itemTarget")
+                recyclerView.adapter?.notifyItemMoved(item, itemTarget)
+                viewModel.moveTo(item, itemTarget)
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val item = viewHolder.layoutPosition
+                viewModel.onRemoveClicked(viewModel.sortedData[item])
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(recyclerViewRecipes)
     }
 }
