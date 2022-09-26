@@ -10,6 +10,9 @@ interface RecipeDao {
     @Query("SELECT * FROM recipes ORDER BY id DESC")
     fun getAll(): LiveData<List<RecipeEntity>>
 
+    @Query("SELECT * FROM recipes WHERE favorite = 1 ORDER BY id DESC")
+    fun getFavorite(): LiveData<List<RecipeEntity>>
+
     @Insert
     fun insert(recipe: RecipeEntity)
 

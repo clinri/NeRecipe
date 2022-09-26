@@ -13,10 +13,12 @@ import ru.netology.nerecipe.util.ItemNotFoundExceptions
 import ru.netology.nerecipe.util.SingleLiveEvent
 
 open class RecipeViewModel(
-    application: Application
+    application: Application,
+    favoriteMode: Boolean
 ) : AndroidViewModel(application), RecipesInteractionListener {
     private val repository: RecipesRepository = RecipesRepositoryImpl(
-        dao = AppDb.getInstance(application).recipeDao
+        dao = AppDb.getInstance(application).recipeDao,
+        favoriteMode
     )
     val data by repository::data
     private var orderSort: MutableList<Int> = mutableListOf()
@@ -36,14 +38,14 @@ open class RecipeViewModel(
             }?.toMutableList() ?: mutableListOf()
         }
         tryAddItemInOrderSort()
+        println(data.value)
+        println()
+        println(orderSort)
+        println()
         sortedData = data.value?.let { sortByOrder(it, orderSort) }!!
     }
 
     private fun sortByOrder(listRecipes: List<Recipe>, order: List<Int>): List<Recipe> {
-        println(listRecipes)
-        println()
-        println(order)
-        println()
         return listRecipes.map { recipe ->
             order.indexOf(recipe.id)
         }.sorted().map { id ->
@@ -116,7 +118,6 @@ open class RecipeViewModel(
     }
 
     fun moveTo(item: Int, itemTarget: Int) {
-        Log.d("MoveTo", "перенос $item на позицию $itemTarget")
         val newList = mutableListOf<Int>()
         newList.addAll(orderSort)
         newList.add(itemTarget, orderSort[item])
