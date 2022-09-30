@@ -10,15 +10,27 @@ import ru.netology.nerecipe.db.toModel
 import ru.netology.nerecipe.dto.Recipe
 
 class RecipesRepositoryImpl(
-    private val dao: RecipeDao,
-    private val favoriteMode: Boolean
+    private val dao: RecipeDao
 ) : RecipesRepository {
 
+    var modeData = 0
+    override var data = when (modeData) {
+        0 -> getLiveData(dao.getAll())
+        1 -> getLiveData(dao.getFavorite())
+        else -> getLiveData(dao.getAll())
+    }
 
-    override val data = if (favoriteMode) {
-        getLiveData(dao.getFavorite())
-    } else {
-        getLiveData(dao.getAll())
+    override fun changeDataByFilter(filter: Int) {
+        when (filter) {
+            0 -> {
+                modeData = 0
+                data = getLiveData(dao.getAll())
+            }
+            1 -> {
+                modeData = 1
+                data = getLiveData(dao.getFavorite())
+            }
+        }
     }
 
     private fun getLiveData(dataInput: LiveData<List<RecipeEntity>>): LiveData<List<Recipe>> =

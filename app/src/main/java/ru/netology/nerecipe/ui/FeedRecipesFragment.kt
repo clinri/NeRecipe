@@ -15,11 +15,11 @@ import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipesAdapter
 import ru.netology.nerecipe.databinding.FeedRecipesFragmentBinding
 import ru.netology.nerecipe.util.StringArg
-import ru.netology.nerecipe.viewModel.FeedRecipeViewModel
+import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class FeedRecipesFragment : Fragment() {
 
-    val viewModel by viewModels<FeedRecipeViewModel>(ownerProducer = ::requireParentFragment)
+    val viewModel by viewModels<RecipeViewModel>(ownerProducer = ::requireParentFragment)
 
     @SuppressLint("ResourceType")
     override fun onCreateView(
@@ -31,6 +31,8 @@ class FeedRecipesFragment : Fragment() {
 
         binding.test.text = "feed"
         binding.test.showSoftInputOnFocus = false
+
+        viewModel.onAllTabClicked()
 
         val recipesAdapter = RecipesAdapter(viewModel)
         binding.recipesRecyclerView.adapter = recipesAdapter
