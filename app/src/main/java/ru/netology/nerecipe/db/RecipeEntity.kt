@@ -16,7 +16,5 @@ class RecipeEntity(
     @ColumnInfo(name = "title")
     val title: String,
     @ColumnInfo(name = "favorite")
-    val favorite: Boolean,
-    @ColumnInfo(name = "orderManual")
-    val orderManual: Int
+    val favorite: Boolean
 )

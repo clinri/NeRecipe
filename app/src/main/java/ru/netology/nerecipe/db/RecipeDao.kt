@@ -8,32 +8,22 @@ import androidx.room.Transaction
 
 @Dao
 interface RecipeDao {
-    @Query("SELECT * FROM recipes ORDER BY orderManual ASC")
+    @Query("SELECT * FROM recipes ORDER BY id DESC")
     fun getAll(): LiveData<List<RecipeEntity>>
 
-    @Query("SELECT * FROM recipes WHERE favorite = 1 ORDER BY orderManual ASC")
+    @Query("SELECT * FROM recipes WHERE favorite = 1 ORDER BY id DESC")
     fun getFavorite(): LiveData<List<RecipeEntity>>
 
     @Insert
-    fun insertRecipeWithoutId(recipe: RecipeEntity):Long
+    fun insertRecipeWithoutId(recipe: RecipeEntity): Long
 
     @Transaction
-    fun insert(recipe: RecipeEntity){
-        val id = insertRecipeWithoutId(recipe).toInt()
-        updateOrderById(id,id)
+    fun insert(recipe: RecipeEntity): Int {
+        return insertRecipeWithoutId(recipe).toInt()
     }
 
     @Query("UPDATE recipes SET title = :title WHERE id = :id")
     fun updateContentById(id: Int, title: String)
-
-    @Query("UPDATE recipes SET orderManual = :order where id = :id")
-    fun updateOrderById(id: Int, order: Int)
-
-    @Transaction
-    fun swapOrdersByIds(id1: Int, order1: Int, id2: Int, order2: Int){
-        updateOrderById(id1,order2)
-        updateOrderById(id2,order1)
-    }
 
     @Query(
         """

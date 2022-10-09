@@ -37,7 +37,7 @@ class FeedFavoriteRecipesFragment : Fragment() {
         val adapter = RecipesAdapter(viewModel)
         binding.feedLayout.recipesRecyclerView.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) {
-            adapter.submitList(viewModel.data.value)
+            adapter.submitList(viewModel.sortedData)
             if (viewModel.data.value?.isEmpty() == true) {
                 binding.feedLayout.emptyImage.setImageResource(R.raw.empty_board)
                 binding.feedLayout.emptyImage.visibility = View.VISIBLE

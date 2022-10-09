@@ -4,9 +4,12 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import ru.netology.nerecipe.adapter.RecipesInteractionListener
+import ru.netology.nerecipe.data.OrderRepository
 import ru.netology.nerecipe.data.RecipesRepository
+import ru.netology.nerecipe.data.impl.InMemoryManualOrderRepository
 import ru.netology.nerecipe.data.impl.RecipesRepositoryImpl
 import ru.netology.nerecipe.db.AppDb
+import ru.netology.nerecipe.dto.Order
 import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.util.ItemNotFoundExceptions
 import ru.netology.nerecipe.util.SingleLiveEvent
@@ -18,11 +21,45 @@ open class RecipeViewModel(
         dao = AppDb.getInstance(application).recipeDao
     )
     val data by repository::data
+    var sortedData: List<Recipe> = mutableListOf()
+    private var orderRepository: OrderRepository = InMemoryManualOrderRepository(data.value!!)
+    private var order: List<Order> = orderRepository.order
 
     val navigateToNewRecipeFragment = SingleLiveEvent<String?>()
     val navigateToSingleRecipeFragment = SingleLiveEvent<Int>()
 
     private val currentRecipe = MutableLiveData<Recipe?>(null)
+
+    init {
+        data.observeForever {
+            updateSortData()
+        }
+    }
+
+    private fun updateSortData() {
+        println(data.value)
+        println(order)
+        sortedData = data.value?.let { sortByOrder(it) }!!
+        println(sortedData)
+    }
+
+    // сортировка списка рецептов по id из списка сортировки
+    private fun sortByOrder(listRecipes: List<Recipe>): List<Recipe> {
+        orderRepository.sort()
+        return order.filter { itOrder ->
+            listRecipes.any { itRecipe ->
+                itOrder.id == itRecipe.id
+            }
+        }.map {
+            it.id
+        }.map { itId ->
+            lateinit var recipe: Recipe
+            listRecipes.forEach { itRecipe ->
+                if (itId == itRecipe.id) recipe = itRecipe
+            }
+            recipe
+        }
+    }
 
     fun onSaveButtonClicked(title: String) {
         if (title.isBlank()) {
@@ -37,15 +74,15 @@ open class RecipeViewModel(
     }
 
     private fun addRecipe(title: String) {
-        repository.insert(
+        val id = repository.insert(
             Recipe( // new
                 id = RecipesRepository.NEW_RECIPE_ID,
                 category = "Russian",
                 author = "Me",
-                title = title,
-                orderManual = 0
+                title = title
             )
         )
+        orderRepository.insert(id)
     }
 
 //region RecipeInteractionListener
@@ -60,6 +97,7 @@ open class RecipeViewModel(
 
     override fun onRemoveClicked(recipe: Recipe) {
         repository.delete(recipe.id)
+        orderRepository.delete(recipe.id)
     }
 
     override fun onAddClicked() {
@@ -82,24 +120,9 @@ open class RecipeViewModel(
     }
 
     fun moveTo(item: Int, itemTarget: Int) {
-        val sortedList = data.value!!.sortedBy {
-            it.orderManual
-        }
-        val (id1,order1) = sortedList[item]
-        val (id2,order2) = sortedList[itemTarget]
-        repository.swapOrdersByIds(id1,order1,id2,order2)
-    }
-
-    /**
-     * Moves the given item at the `oldIndex` to the `newIndex`
-     */
-    private fun <T> MutableList<T>.moveAt(oldIndex: Int, newIndex: Int) {
-        val item = this[oldIndex]
-        this.removeAt(oldIndex)
-        if (oldIndex > newIndex)
-            add(newIndex, item)
-        else
-            add(newIndex - 1, item)
+        val (id1, order1) = order[itemTarget]
+        val (id2, order2) = order[itemTarget]
+        orderRepository.swapOrdersByIds(id1, order1, id2, order2)
     }
 
     fun onFavoriteTabClicked() {

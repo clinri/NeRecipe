@@ -37,7 +37,7 @@ class FeedRecipesFragment : Fragment() {
         val recipesAdapter = RecipesAdapter(viewModel)
         binding.recipesRecyclerView.adapter = recipesAdapter
         viewModel.data.observe(viewLifecycleOwner) {
-            recipesAdapter.submitList(viewModel.data.value)
+            recipesAdapter.submitList(viewModel.sortedData)
             if (viewModel.data.value?.isEmpty() == true) {
                 binding.emptyImage.setImageResource(R.raw.empty_plate)
                 binding.emptyImage.visibility = View.VISIBLE

@@ -38,16 +38,10 @@ class RecipesRepositoryImpl(
             entities.map { it.toModel() }
         }
 
-    override fun insert(recipe: Recipe) {
-        dao.insert(recipe.toEntity())
-    }
+    override fun insert(recipe: Recipe): Int = dao.insert(recipe.toEntity())
 
     override fun updateContentById(recipe: Recipe) {
         dao.updateContentById(recipe.id, recipe.title)
-    }
-
-    override fun swapOrdersByIds(id1: Int, order1: Int, id2: Int, order2: Int) {
-        dao.swapOrdersByIds(id1, order1, id2, order2)
     }
 
     override fun favorite(recipeId: Int) {
