@@ -13,7 +13,7 @@ class RecipesRepositoryImpl(
     private val dao: RecipeDao
 ) : RecipesRepository {
 
-    var modeData = 0
+    private var modeData = 0
     override var data = when (modeData) {
         0 -> getLiveData(dao.getAll())
         1 -> getLiveData(dao.getFavorite())
@@ -44,6 +44,10 @@ class RecipesRepositoryImpl(
 
     override fun updateContentById(recipe: Recipe) {
         dao.updateContentById(recipe.id, recipe.title)
+    }
+
+    override fun swapOrdersByIds(id1: Int, order1: Int, id2: Int, order2: Int) {
+        dao.swapOrdersByIds(id1, order1, id2, order2)
     }
 
     override fun favorite(recipeId: Int) {

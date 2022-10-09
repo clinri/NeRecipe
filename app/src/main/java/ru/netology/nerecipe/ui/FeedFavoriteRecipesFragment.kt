@@ -37,9 +37,8 @@ class FeedFavoriteRecipesFragment : Fragment() {
         val adapter = RecipesAdapter(viewModel)
         binding.feedLayout.recipesRecyclerView.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) {
-            viewModel.updateSortData()
-            adapter.submitList(viewModel.sortedData)
-            if (viewModel.sortedData.isEmpty()) {
+            adapter.submitList(viewModel.data.value)
+            if (viewModel.data.value?.isEmpty() == true) {
                 binding.feedLayout.emptyImage.setImageResource(R.raw.empty_board)
                 binding.feedLayout.emptyImage.visibility = View.VISIBLE
                 binding.feedLayout.recipesRecyclerView.visibility = View.GONE
@@ -88,7 +87,7 @@ class FeedFavoriteRecipesFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val item = viewHolder.layoutPosition
-                viewModel.onRemoveClicked(viewModel.sortedData[item])
+                viewModel.onRemoveClicked(viewModel.data.value!![item])
             }
         }
         val itemTouchHelper = ItemTouchHelper(callback)

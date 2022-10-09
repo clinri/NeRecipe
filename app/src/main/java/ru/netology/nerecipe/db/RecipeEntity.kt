@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity (tableName = "recipes")
+@Entity(tableName = "recipes")
 class RecipeEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -16,5 +16,7 @@ class RecipeEntity(
     @ColumnInfo(name = "title")
     val title: String,
     @ColumnInfo(name = "favorite")
-    val favorite: Boolean
+    val favorite: Boolean,
+    @ColumnInfo(name = "orderManual")
+    val orderManual: Int
 )
