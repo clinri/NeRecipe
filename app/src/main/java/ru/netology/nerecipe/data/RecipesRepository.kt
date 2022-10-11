@@ -5,7 +5,8 @@ import ru.netology.nerecipe.dto.Recipe
 
 interface RecipesRepository {
     val data: LiveData<List<Recipe>>
-    fun changeDataByFilter(filter: Int)
+    fun changeDataByFilter(filter: Int, text: String)
+    fun changeSearchText(textForSearch: String)
     fun favorite(recipeId: Int)
     fun delete(recipeId: Int)
     fun insert(recipe: Recipe)

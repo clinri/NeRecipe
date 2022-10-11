@@ -21,8 +21,25 @@ open class RecipeViewModel(
 
     val navigateToNewRecipeFragment = SingleLiveEvent<String?>()
     val navigateToSingleRecipeFragment = SingleLiveEvent<Int>()
+    val activateSearchBar = SingleLiveEvent<Boolean>()
+    val activateFilterFragment = SingleLiveEvent<Unit>()
+    val hideOptionMenu = SingleLiveEvent<Boolean>()
+
+    private var textForSearch = ""
+
+    fun optionMenuIsHidden(state: Boolean){
+        hideOptionMenu.value = state
+    }
+
+    fun onFilterButtonBarClicked() {
+        activateFilterFragment.value = Unit
+    }
 
     private val currentRecipe = MutableLiveData<Recipe?>(null)
+
+    init {
+        activateSearchBar.value = false
+    }
 
     fun onSaveButtonClicked(title: String) {
         if (title.isBlank()) {
@@ -85,9 +102,9 @@ open class RecipeViewModel(
         val sortedList = data.value!!.sortedBy {
             it.orderManual
         }
-        val (id1,order1) = sortedList[item]
-        val (id2,order2) = sortedList[itemTarget]
-        repository.swapOrdersByIds(id1,order1,id2,order2)
+        val (id1, order1) = sortedList[item]
+        val (id2, order2) = sortedList[itemTarget]
+        repository.swapOrdersByIds(id1, order1, id2, order2)
     }
 
     /**
@@ -103,11 +120,15 @@ open class RecipeViewModel(
     }
 
     fun onFavoriteTabClicked() {
-        repository.changeDataByFilter(FAVORITE)
+        repository.changeDataByFilter(FAVORITE, textForSearch)
     }
 
     fun onAllTabClicked() {
-        repository.changeDataByFilter(ALL)
+        repository.changeDataByFilter(ALL, textForSearch)
+    }
+
+    fun onSearch(text:String){
+        repository.changeSearchText(text)
     }
 
     companion object {

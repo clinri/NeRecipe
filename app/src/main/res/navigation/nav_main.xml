@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_feedRecipesFragment_to_feedFavoriteRecipesFragment"
             app:destination="@id/feedFavoriteRecipesFragment" />
+        <action
+            android:id="@+id/action_feedRecipesFragment_to_listFilterFragment"
+            app:destination="@id/listFilterFragment" />
     </fragment>
     <fragment
         android:id="@+id/newRecipeFragment"
@@ -29,5 +32,19 @@
         <action
             android:id="@+id/action_feedFavoriteRecipesFragment_to_newRecipeFragment"
             app:destination="@id/newRecipeFragment" />
+        <action
+            android:id="@+id/action_feedFavoriteRecipesFragment_to_listFilterFragment"
+            app:destination="@id/listFilterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/listFilterFragment"
+        android:name="ru.netology.nerecipe.ui.ListFilterFragment"
+        android:label="ListFilterFragment" >
+        <action
+            android:id="@+id/action_listFilterFragment_to_feedRecipesFragment"
+            app:destination="@id/feedRecipesFragment" />
+        <action
+            android:id="@+id/action_listFilterFragment_to_feedFavoriteRecipesFragment"
+            app:destination="@id/feedFavoriteRecipesFragment" />
     </fragment>
 </navigation>

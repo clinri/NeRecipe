@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -17,9 +18,7 @@ import ru.netology.nerecipe.databinding.FragmentFeedFavoriteRecipesBinding
 import ru.netology.nerecipe.ui.FeedRecipesFragment.Companion.textArg
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
-class FeedFavoriteRecipesFragment : Fragment() {
-
-    val viewModel by viewModels<RecipeViewModel>(ownerProducer = ::requireParentFragment)
+class FeedFavoriteRecipesFragment : FeedRecipesFragment() {
 
     @SuppressLint("ResourceType")
     override fun onCreateView(
@@ -28,10 +27,10 @@ class FeedFavoriteRecipesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentFeedFavoriteRecipesBinding.inflate(inflater, container, false)
-
         binding.feedLayout.test.text = "favorite"
-        binding.feedLayout.test.showSoftInputOnFocus = false
 
+        val viewModel by requireActivity().viewModels<RecipeViewModel>()
+        viewModel.optionMenuIsHidden(false)
         viewModel.onFavoriteTabClicked()
 
         val adapter = RecipesAdapter(viewModel)
@@ -61,36 +60,12 @@ class FeedFavoriteRecipesFragment : Fragment() {
             viewModel.onAddClicked()
         }
 
-        //        setupMoveAndSwipeListener
+        // setupMoveAndSwipeListener
         val recyclerViewRecipes = binding.feedLayout.recipesRecyclerView
-        setupMoveAndSwipeListener(recyclerViewRecipes)
-        return binding.root
-    }
-
-    private fun setupMoveAndSwipeListener(recyclerViewRecipes: RecyclerView) {
-        val callback = object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        ) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                val item = viewHolder.absoluteAdapterPosition
-                val itemTarget = target.absoluteAdapterPosition
-                Log.d("move", "move from $item to $itemTarget")
-                recyclerView.adapter?.notifyItemMoved(item, itemTarget)
-                viewModel.moveTo(item, itemTarget)
-                return true
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = viewHolder.layoutPosition
-                viewModel.onRemoveClicked(viewModel.data.value!![item])
-            }
+        setupMoveAndSwipeListener(recyclerViewRecipes,viewModel)
+        viewModel.activateFilterFragment.observe(viewLifecycleOwner){
+            startFilterFragment(R.id.action_feedFavoriteRecipesFragment_to_listFilterFragment)
         }
-        val itemTouchHelper = ItemTouchHelper(callback)
-        itemTouchHelper.attachToRecyclerView(recyclerViewRecipes)
+        return binding.root
     }
 }

@@ -6,8 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -17,9 +17,7 @@ import ru.netology.nerecipe.databinding.FeedRecipesFragmentBinding
 import ru.netology.nerecipe.util.StringArg
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
-class FeedRecipesFragment : Fragment() {
-
-    val viewModel by viewModels<RecipeViewModel>(ownerProducer = ::requireParentFragment)
+open class FeedRecipesFragment : Fragment() {
 
     @SuppressLint("ResourceType")
     override fun onCreateView(
@@ -28,12 +26,11 @@ class FeedRecipesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FeedRecipesFragmentBinding.inflate(inflater, container, false)
-
         binding.test.text = "feed"
-        binding.test.showSoftInputOnFocus = false
 
+        val viewModel by requireActivity().viewModels<RecipeViewModel>()
+        viewModel.optionMenuIsHidden(false)
         viewModel.onAllTabClicked()
-
         val recipesAdapter = RecipesAdapter(viewModel)
         binding.recipesRecyclerView.adapter = recipesAdapter
         viewModel.data.observe(viewLifecycleOwner) {
@@ -62,11 +59,22 @@ class FeedRecipesFragment : Fragment() {
         }
 //        setupMoveAndSwipeListener
         val recyclerViewRecipes = binding.recipesRecyclerView
-        setupMoveAndSwipeListener(recyclerViewRecipes)
+        setupMoveAndSwipeListener(recyclerViewRecipes, viewModel)
+        viewModel.activateFilterFragment.observe(viewLifecycleOwner){
+            startFilterFragment(R.id.action_feedRecipesFragment_to_listFilterFragment)
+        }
+
         return binding.root
     }
 
-    private fun setupMoveAndSwipeListener(recyclerViewRecipes: RecyclerView) {
+    internal fun Fragment.startFilterFragment(action: Int) {
+        findNavController().navigate(action)
+    }
+
+    internal fun setupMoveAndSwipeListener(
+        recyclerViewRecipes: RecyclerView,
+        viewModel: RecipeViewModel
+    ) {
         val callback = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -78,6 +86,7 @@ class FeedRecipesFragment : Fragment() {
             ): Boolean {
                 val item = viewHolder.absoluteAdapterPosition
                 val itemTarget = target.absoluteAdapterPosition
+                if (item == itemTarget) return false
                 Log.d("move", "move from $item to $itemTarget")
                 recyclerView.adapter?.notifyItemMoved(item, itemTarget)
                 viewModel.moveTo(item, itemTarget)

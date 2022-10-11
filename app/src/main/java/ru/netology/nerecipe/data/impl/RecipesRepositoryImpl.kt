@@ -12,25 +12,36 @@ import ru.netology.nerecipe.dto.Recipe
 class RecipesRepositoryImpl(
     private val dao: RecipeDao
 ) : RecipesRepository {
-
+    private var text: String = "%"
     private var modeData = 0
     override var data = when (modeData) {
-        0 -> getLiveData(dao.getAll())
-        1 -> getLiveData(dao.getFavorite())
-        else -> getLiveData(dao.getAll())
+        0 -> getLiveData(dao.getAll(text))
+        1 -> getLiveData(dao.getFavorite(text))
+        else -> getLiveData(dao.getAll(text))
     }
 
-    override fun changeDataByFilter(filter: Int) {
+    override fun changeDataByFilter(filter: Int, textForSearch: String) {
+        text = "%"
         when (filter) {
             0 -> {
                 modeData = 0
-                data = getLiveData(dao.getAll())
+                data = getLiveData(dao.getAll(text))
             }
             1 -> {
                 modeData = 1
-                data = getLiveData(dao.getFavorite())
+                data = getLiveData(dao.getFavorite(text))
             }
         }
+    }
+
+    override fun changeSearchText(textForSearch: String) {
+        text = if (textForSearch == "") {
+            "%"
+        } else {
+            textForSearch
+        }
+        println(text)
+        data = getLiveData(dao.getAll(text))
     }
 
     private fun getLiveData(dataInput: LiveData<List<RecipeEntity>>): LiveData<List<Recipe>> =
