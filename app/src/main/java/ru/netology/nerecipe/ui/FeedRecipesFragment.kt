@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipesAdapter
 import ru.netology.nerecipe.databinding.FeedRecipesFragmentBinding
-import ru.netology.nerecipe.util.StringArg
+import ru.netology.nerecipe.util.IntArg
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 open class FeedRecipesFragment : Fragment() {
@@ -33,8 +33,11 @@ open class FeedRecipesFragment : Fragment() {
         viewModel.onAllTabClicked()
         val recipesAdapter = RecipesAdapter(viewModel)
         binding.recipesRecyclerView.adapter = recipesAdapter
+        var f = 1
         viewModel.data.observe(viewLifecycleOwner) {
-            recipesAdapter.submitList(viewModel.data.value)
+            println("All:${f++}")
+            recipesAdapter.submitList(it)
+            println(it)
             if (viewModel.data.value?.isEmpty() == true) {
                 binding.emptyImage.setImageResource(R.raw.empty_plate)
                 binding.emptyImage.visibility = View.VISIBLE
@@ -44,13 +47,29 @@ open class FeedRecipesFragment : Fragment() {
                 binding.recipesRecyclerView.visibility = View.VISIBLE
             }
         }
+        viewModel.activateSearching.observe(viewLifecycleOwner) {
+            println("observe activate searching on All tab")
+            viewModel.data.observe(viewLifecycleOwner) {
+                println("All:${f++}")
+                recipesAdapter.submitList(it)
+                println(it)
+                if (viewModel.data.value?.isEmpty() == true) {
+                    binding.emptyImage.setImageResource(R.raw.empty_plate)
+                    binding.emptyImage.visibility = View.VISIBLE
+                    binding.recipesRecyclerView.visibility = View.GONE
+                } else {
+                    binding.emptyImage.visibility = View.GONE
+                    binding.recipesRecyclerView.visibility = View.VISIBLE
+                }
+            }
+        }
 
         viewModel.navigateToNewRecipeFragment.observe(viewLifecycleOwner) {
             findNavController()
                 .navigate(
                     R.id.action_feedRecipesFragment_to_newRecipeFragment,
                     Bundle().apply {
-                        textArg = it
+                        intArg = it
                     }
                 )
         }
@@ -60,10 +79,9 @@ open class FeedRecipesFragment : Fragment() {
 //        setupMoveAndSwipeListener
         val recyclerViewRecipes = binding.recipesRecyclerView
         setupMoveAndSwipeListener(recyclerViewRecipes, viewModel)
-        viewModel.activateFilterFragment.observe(viewLifecycleOwner){
+        viewModel.activateFilterFragment.observe(viewLifecycleOwner) {
             startFilterFragment(R.id.action_feedRecipesFragment_to_listFilterFragment)
         }
-
         return binding.root
     }
 
@@ -103,6 +121,6 @@ open class FeedRecipesFragment : Fragment() {
     }
 
     companion object {
-        var Bundle.textArg: String? by StringArg
+        var Bundle.intArg: Int by IntArg
     }
 }

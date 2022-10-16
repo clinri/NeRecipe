@@ -5,31 +5,41 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import ru.netology.nerecipe.dto.KitchenCategory
 
 @Dao
 interface RecipeDao {
-    @Query(
-        """
-        SELECT * FROM recipes 
-        WHERE title LIKE :text
-    """
-    )
+    @Query("SELECT * FROM recipes WHERE title LIKE :text ORDER BY orderManual DESC")
     fun getAll(text: String): LiveData<List<RecipeEntity>>
 
     @Query("SELECT * FROM recipes WHERE title LIKE :text AND favorite = 1 ORDER BY orderManual DESC")
     fun getFavorite(text: String): LiveData<List<RecipeEntity>>
 
+//    @Query(
+//        """
+//        SELECT * FROM recipes
+//        WHERE title LIKE :text AND favorite = 1 ORDER BY orderManual DESC
+//    """
+//    )
+//    fun getFavorite(text: String, category: Category): LiveData<List<RecipeEntity>>
+
     @Insert
-    fun insertRecipeWithoutId(recipe: RecipeEntity): Long
+    fun insertRecipeAndGetId(recipe: RecipeEntity): Long
 
     @Transaction
     fun insert(recipe: RecipeEntity) {
-        val id = insertRecipeWithoutId(recipe).toInt()
+        val id = insertRecipeAndGetId(recipe).toInt()
         updateOrderById(id, id)
     }
 
-    @Query("UPDATE recipes SET title = :title WHERE id = :id")
-    fun updateContentById(id: Int, title: String)
+    @Query("""
+        UPDATE recipes SET 
+        title = :title,
+        category = :category,
+        author = :author 
+        WHERE id = :id
+    """)
+    fun updateContentById(id: Int, category: KitchenCategory, author: String, title: String)
 
     @Query("UPDATE recipes SET orderManual = :order WHERE id = :id")
     fun updateOrderById(id: Int, order: Int)

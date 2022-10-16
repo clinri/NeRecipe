@@ -39,7 +39,9 @@ class RecipesViewHolder(
     fun bind(recipe: Recipe) {
         this.recipe = recipe
         with(binding) {
-            category.text = recipe.category
+            nameCategory.text = binding.root.context.getString(R.string.kitchen_category)
+            nameAuthor.text = binding.root.context.getString(R.string.author_name)
+            category.text = recipe.kitchenCategory.getLabel(binding.root.context)
             author.text = recipe.author
             titleRecipe.text = recipe.title
             favoriteToggle.isChecked = recipe.favorite

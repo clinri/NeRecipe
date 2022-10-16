@@ -1,5 +1,6 @@
 package ru.netology.nerecipe.data.impl
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import ru.netology.nerecipe.data.RecipesRepository
@@ -7,42 +8,34 @@ import ru.netology.nerecipe.db.RecipeDao
 import ru.netology.nerecipe.db.RecipeEntity
 import ru.netology.nerecipe.db.toEntity
 import ru.netology.nerecipe.db.toModel
+import ru.netology.nerecipe.dto.FilterName
 import ru.netology.nerecipe.dto.Recipe
 
 class RecipesRepositoryImpl(
-    private val dao: RecipeDao
+    private val dao: RecipeDao,
 ) : RecipesRepository {
     private var text: String = "%"
-    private var modeData = 0
+    private var modeData = FilterName.ALL
     override var data = when (modeData) {
-        0 -> getLiveData(dao.getAll(text))
-        1 -> getLiveData(dao.getFavorite(text))
-        else -> getLiveData(dao.getAll(text))
+        FilterName.ALL -> getLiveData(dao.getAll(text))
+        FilterName.FAVORITE -> getLiveData(dao.getFavorite(text))
     }
 
-    override fun changeDataByFilter(filter: Int, textForSearch: String) {
-        text = "%"
+    override fun changeDataByFilter(textForSearch: String, filter: FilterName) {
+        val text = textForSearch.ifBlank { "%" }
+        println(text)
         when (filter) {
-            0 -> {
-                modeData = 0
+            FilterName.ALL -> {
+                modeData = FilterName.ALL
                 data = getLiveData(dao.getAll(text))
             }
-            1 -> {
-                modeData = 1
+            FilterName.FAVORITE -> {
+                modeData = FilterName.FAVORITE
                 data = getLiveData(dao.getFavorite(text))
             }
         }
     }
 
-    override fun changeSearchText(textForSearch: String) {
-        text = if (textForSearch == "") {
-            "%"
-        } else {
-            textForSearch
-        }
-        println(text)
-        data = getLiveData(dao.getAll(text))
-    }
 
     private fun getLiveData(dataInput: LiveData<List<RecipeEntity>>): LiveData<List<Recipe>> =
         dataInput.map { entities ->
@@ -54,7 +47,8 @@ class RecipesRepositoryImpl(
     }
 
     override fun updateContentById(recipe: Recipe) {
-        dao.updateContentById(recipe.id, recipe.title)
+        Log.d("recipe", recipe.toString())
+        dao.updateContentById(recipe.id, recipe.kitchenCategory, recipe.author, recipe.title)
     }
 
     override fun swapOrdersByIds(id1: Int, order1: Int, id2: Int, order2: Int) {

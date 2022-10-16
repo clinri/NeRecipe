@@ -1,12 +1,12 @@
 package ru.netology.nerecipe.data
 
 import androidx.lifecycle.LiveData
+import ru.netology.nerecipe.dto.FilterName
 import ru.netology.nerecipe.dto.Recipe
 
 interface RecipesRepository {
     val data: LiveData<List<Recipe>>
-    fun changeDataByFilter(filter: Int, text: String)
-    fun changeSearchText(textForSearch: String)
+    fun changeDataByFilter(textForSearch: String, filter: FilterName)
     fun favorite(recipeId: Int)
     fun delete(recipeId: Int)
     fun insert(recipe: Recipe)
@@ -15,5 +15,6 @@ interface RecipesRepository {
 
     companion object {
         const val NEW_RECIPE_ID = 0
+        const val NEW_ORDER = 0
     }
 }

@@ -15,22 +15,26 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.databinding.ActivityAppBinding
+import ru.netology.nerecipe.dto.FilterName
 import ru.netology.nerecipe.util.StringArg
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
-class AppActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
+class AppActivity :
+    AppCompatActivity(),
+    SearchView.OnQueryTextListener { //, MenuItem.OnActionExpandListener
     private lateinit var binding: ActivityAppBinding
     private lateinit var navController: NavController
     private val viewModel by viewModels<RecipeViewModel>()
+    private var tabName: FilterName = FilterName.ALL
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.app_bar, menu)
         val search = menu?.findItem(R.id.search)
         val searchView = search?.actionView as? SearchView
-        searchView?.isSubmitButtonEnabled = true
+        searchView?.isSubmitButtonEnabled = false
         searchView?.setOnQueryTextListener(this)
         //check to need hide menu
-        viewModel.hideOptionMenu.observe(this){
+        viewModel.hideOptionMenu.observe(this) {
             menu?.forEach { menuItem ->
                 menuItem.isVisible = !it
             }
@@ -38,13 +42,9 @@ class AppActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         return true
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
         return when (item.itemId) {
-//            R.id.search -> {
-//                viewModel.onSearchButtonBarClicked()
-//                true
-//            }
             R.id.filter -> {
                 viewModel.onFilterButtonBarClicked()
                 true
@@ -68,19 +68,22 @@ class AppActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         navController = navHostFragment.navController
         binding.navigationMenu.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener { _, distanation, _ ->
-            if (distanation.id == R.id.newRecipeFragment || distanation.id == R.id.listFilterFragment) {
-                binding.navigationMenu.visibility = View.GONE
-            } else {
-                binding.navigationMenu.visibility = View.VISIBLE
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.newRecipeFragment -> binding.navigationMenu.visibility = View.GONE
+                R.id.listFilterFragment -> binding.navigationMenu.visibility = View.GONE
+                R.id.feedRecipesFragment -> {
+                    tabName = FilterName.ALL
+                    binding.navigationMenu.visibility = View.VISIBLE
+                }
+                R.id.feedFavoriteRecipesFragment -> {
+                    tabName = FilterName.FAVORITE
+                    binding.navigationMenu.visibility = View.VISIBLE
+                }
+                else -> binding.navigationMenu.visibility = View.VISIBLE
             }
         }
-
         binding.navigationMenu.clearFocus()
-    }
-
-    companion object {
-        var Bundle.textArg: String? by StringArg
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -109,15 +112,23 @@ class AppActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-//        if(query != null){
-//            searchDatabase("%$query%")
-//        }
         return true
     }
 
     override fun onQueryTextChange(query: String?): Boolean {
-        query?.let(viewModel::onSearch)
+        query?.let(::searchDatabase)
         return true
     }
 
+    private fun searchDatabase(query: String) {
+        // %" "% because our custom sql query will require that
+        val searchQuery = "%$query%"
+        viewModel.searchDatabase(searchQuery, tabName)
+    }
+
+    companion object {
+        var Bundle.textArg: String? by StringArg
+        const val ALL_TAB = 0
+        const val FAVORITE_TAB = 1
+    }
 }

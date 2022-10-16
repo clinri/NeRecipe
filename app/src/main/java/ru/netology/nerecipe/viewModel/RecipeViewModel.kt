@@ -7,27 +7,30 @@ import ru.netology.nerecipe.adapter.RecipesInteractionListener
 import ru.netology.nerecipe.data.RecipesRepository
 import ru.netology.nerecipe.data.impl.RecipesRepositoryImpl
 import ru.netology.nerecipe.db.AppDb
+import ru.netology.nerecipe.dto.FilterName
+import ru.netology.nerecipe.dto.KitchenCategory
 import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.util.ItemNotFoundExceptions
 import ru.netology.nerecipe.util.SingleLiveEvent
 
 open class RecipeViewModel(
-    application: Application
+    application: Application,
 ) : AndroidViewModel(application), RecipesInteractionListener {
     private val repository: RecipesRepository = RecipesRepositoryImpl(
         dao = AppDb.getInstance(application).recipeDao
     )
     val data by repository::data
 
-    val navigateToNewRecipeFragment = SingleLiveEvent<String?>()
+    val navigateToNewRecipeFragment = SingleLiveEvent<Int>()
     val navigateToSingleRecipeFragment = SingleLiveEvent<Int>()
     val activateSearchBar = SingleLiveEvent<Boolean>()
     val activateFilterFragment = SingleLiveEvent<Unit>()
     val hideOptionMenu = SingleLiveEvent<Boolean>()
+    val activateSearching = SingleLiveEvent<Unit>()
 
     private var textForSearch = ""
 
-    fun optionMenuIsHidden(state: Boolean){
+    fun optionMenuIsHidden(state: Boolean) {
         hideOptionMenu.value = state
     }
 
@@ -41,26 +44,29 @@ open class RecipeViewModel(
         activateSearchBar.value = false
     }
 
-    fun onSaveButtonClicked(title: String) {
-        if (title.isBlank()) {
+    fun onSaveButtonClicked(recipe: Recipe) {
+        if (recipe.title.isBlank()) {
             return
         }
         currentRecipe.value?.also {
             repository.updateContentById(
-                it.copy(title = title)
+                it.copy(
+                    title = recipe.title,
+                    kitchenCategory = recipe.kitchenCategory,
+                    author = recipe.author)
             )
-        } ?: addRecipe(title)
+        } ?: addRecipe(recipe)
         currentRecipe.value = null
     }
 
-    private fun addRecipe(title: String) {
+    private fun addRecipe(recipe: Recipe) {
         repository.insert(
             Recipe( // new
                 id = RecipesRepository.NEW_RECIPE_ID,
-                category = "Russian",
-                author = "Me",
-                title = title,
-                orderManual = 0
+                kitchenCategory = recipe.kitchenCategory,
+                author = recipe.author,
+                title = recipe.title,
+                orderManual = RecipesRepository.NEW_ORDER
             )
         )
     }
@@ -80,11 +86,11 @@ open class RecipeViewModel(
     }
 
     override fun onAddClicked() {
-        navigateToNewRecipeFragment.value = null
+        navigateToNewRecipeFragment.value = 0
     }
 
     override fun onEditClicked(recipe: Recipe) {
-        navigateToNewRecipeFragment.value = recipe.title
+        navigateToNewRecipeFragment.value = recipe.id
         currentRecipe.value = recipe
     }
 
@@ -120,19 +126,19 @@ open class RecipeViewModel(
     }
 
     fun onFavoriteTabClicked() {
-        repository.changeDataByFilter(FAVORITE, textForSearch)
+        repository.changeDataByFilter(textForSearch, FilterName.FAVORITE)
     }
 
     fun onAllTabClicked() {
-        repository.changeDataByFilter(ALL, textForSearch)
+        repository.changeDataByFilter(textForSearch, FilterName.ALL)
     }
 
-    fun onSearch(text:String){
-        repository.changeSearchText(text)
-    }
+//    fun onSearch(text: String) {
+//        activateSearching.value = repository.changeSearchText("$text")
+//    }
 
-    companion object {
-        const val ALL = 0
-        const val FAVORITE = 1
+    fun searchDatabase(searchQuery: String, filter: FilterName) {
+        repository.changeDataByFilter(searchQuery, filter)
+        activateSearching.value = Unit
     }
 }

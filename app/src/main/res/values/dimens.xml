@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="small_spacing">8dp</dimen>
     <dimen name="common_spacing">12dp</dimen>
-    <dimen name="font_category">16dp</dimen>
-    <dimen name="font_author">20dp</dimen>
-    <dimen name="font_title_recipe">28dp</dimen>
+    <dimen name="font_category">16sp</dimen>
+    <dimen name="font_category_edit">20sp</dimen>
+    <dimen name="font_author">20sp</dimen>
+    <dimen name="font_title_recipe">28sp</dimen>
     <dimen name="fab_margin">15dp</dimen>
+    <dimen name="size_spinner">32dp</dimen>
 </resources>

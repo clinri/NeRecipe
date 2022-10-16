@@ -1,14 +1,29 @@
 <resources>
-    <string name="app_name">NeRecipe</string>
-    <string name="searchEditFrameText">input for search</string>
-    <string name="all_recipes_item">All recipes</string>
-    <string name="favorite_recipes_item">Favorite</string>
-    <string name="remove">Remove</string>
-    <string name="edit">Edit</string>
-    <string name="add_recipes_item">Add</string>
-    <string name="add_post">Add post</string>
+    <string name="app_name" translatable="false">NeRecipe</string>
+    <string name="searchEditFrameText" translatable="false">input for search</string>
+    <string name="all_recipes_item" translatable="false">All recipes</string>
+    <string name="favorite_recipes_item" translatable="false">Favorite</string>
+    <string name="remove" translatable="false">Remove</string>
+    <string name="edit" translatable="false">Edit</string>
+    <string name="add_recipes_item" translatable="false">Add</string>
+    <string name="add_post" translatable="false">Add post</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="search">Search</string>
-    <string name="filter">Filter</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="search" translatable="false">Search</string>
+    <string name="filter" translatable="false">Filter</string>
+    <!-- Categories -->
+    <string name="kitchen_category">Kitchen category:</string>
+    <string name="author_name">Author:</string>
+    <string name="european">European</string>
+    <string name="asian">Asian</string>
+    <string name="pan_asian">Pan asian</string>
+    <string name="eastern">Eastern</string>
+    <string name="american">American</string>
+    <string name="russian">Russian</string>
+    <string name="mediterranean">Mediterranean</string>
+    <string name="select_kitchen_category">select kitchen category</string>
+    <string name="click_ok_button">click OK button</string>
+    <string name="name_of_recipe">Name of recipe</string>
+    <string name="title">Title:</string>
+    <string name="author">author</string>
 </resources>

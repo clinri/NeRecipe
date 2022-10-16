@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/small_spacing"
+    android:textSize="@dimen/font_category"
+    android:textColor="@color/black"
+    android:text="@string/author_name"
+    android:spinnerMode="dropdown"
+    tools:ignore="SpUsage" />

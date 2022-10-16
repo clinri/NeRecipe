@@ -1,11 +1,10 @@
 package ru.netology.nerecipe.db
 
-import ru.netology.nerecipe.db.RecipeEntity
 import ru.netology.nerecipe.dto.Recipe
 
 internal fun RecipeEntity.toModel() = Recipe(
     id = id,
-    category = category,
+    kitchenCategory = kitchenCategory,
     author = author,
     title = title,
     favorite = favorite,
@@ -14,7 +13,7 @@ internal fun RecipeEntity.toModel() = Recipe(
 
 internal fun Recipe.toEntity() = RecipeEntity(
     id = id,
-    category = category,
+    kitchenCategory = kitchenCategory,
     author = author,
     title = title,
     favorite = favorite,

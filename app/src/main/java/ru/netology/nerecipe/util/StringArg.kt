@@ -12,5 +12,4 @@ object StringArg : ReadWriteProperty<Bundle, String?> {
     override fun getValue(thisRef: Bundle, property: KProperty<*>): String? {
         return thisRef.getString(property.name)
     }
-
 }

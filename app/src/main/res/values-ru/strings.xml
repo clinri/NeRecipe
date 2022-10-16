@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="american">Американская</string>
+    <string name="asian">Азиаткая</string>
+    <string name="eastern">Восточная</string>
+    <string name="pan_asian">Паназиатская</string>
+    <string name="mediterranean">Средиземноморская</string>
+    <string name="russian">Русская</string>
+    <string name="european">Европейская</string>
+    <string name="kitchen_category">Категория кухни:</string>
+    <string name="author_name">Автор:</string>
+    <string name="select_kitchen_category">select kitchen category</string>
+    <string name="click_ok_button">click OK button</string>
+    <string name="name_of_recipe">Name of recipe</string>
+    <string name="title">Title:</string>
+    <string name="author">author</string>
+</resources>

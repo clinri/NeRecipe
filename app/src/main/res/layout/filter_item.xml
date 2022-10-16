@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/card_filter_category"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/small_spacing"
+    android:layout_marginTop="@dimen/small_spacing"
+    android:layout_marginEnd="@dimen/small_spacing"
+    android:layout_marginBottom="@dimen/small_spacing"
+    app:cardCornerRadius="@dimen/small_spacing"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true">
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:id="@+id/check_box"
+        android:layout_height="match_parent"
+        android:background="@color/yellow"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:paddingLeft="@dimen/small_spacing"
+        android:paddingRight="@dimen/small_spacing"
+        android:text="hello" />
+</androidx.cardview.widget.CardView>
