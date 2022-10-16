@@ -31,8 +31,13 @@ class RecipesViewHolder(
     }
 
     init {
-        binding.favoriteToggle.setOnClickListener {
-            listener.onFavoriteClicked(recipe)
+        with(binding) {
+            favoriteToggle.setOnClickListener {
+                listener.onFavoriteClicked(recipe)
+            }
+            recipeCardFrame.setOnClickListener {
+                listener.onRecipeClicked(recipe)
+            }
         }
     }
 

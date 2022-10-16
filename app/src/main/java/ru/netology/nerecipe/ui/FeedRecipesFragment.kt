@@ -73,6 +73,15 @@ open class FeedRecipesFragment : Fragment() {
                     }
                 )
         }
+        viewModel.navigateToSingleRecipeFragment.observe(viewLifecycleOwner) {
+            findNavController()
+                .navigate(
+                    R.id.action_feedRecipesFragment_to_singleRecipeFragment,
+                    Bundle().apply {
+                        intArg = it
+                    }
+                )
+        }
         binding.fab.setOnClickListener {
             viewModel.onAddClicked()
         }

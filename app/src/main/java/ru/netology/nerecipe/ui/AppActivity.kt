@@ -80,6 +80,9 @@ class AppActivity :
                     tabName = FilterName.FAVORITE
                     binding.navigationMenu.visibility = View.VISIBLE
                 }
+                R.id.singleRecipeFragment -> {
+                    binding.navigationMenu.visibility = View.GONE
+                }
                 else -> binding.navigationMenu.visibility = View.VISIBLE
             }
         }

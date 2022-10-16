@@ -23,7 +23,6 @@ open class RecipeViewModel(
 
     val navigateToNewRecipeFragment = SingleLiveEvent<Int>()
     val navigateToSingleRecipeFragment = SingleLiveEvent<Int>()
-    val activateSearchBar = SingleLiveEvent<Boolean>()
     val activateFilterFragment = SingleLiveEvent<Unit>()
     val hideOptionMenu = SingleLiveEvent<Boolean>()
     val activateSearching = SingleLiveEvent<Unit>()
@@ -39,10 +38,6 @@ open class RecipeViewModel(
     }
 
     private val currentRecipe = MutableLiveData<Recipe?>(null)
-
-    init {
-        activateSearchBar.value = false
-    }
 
     fun onSaveButtonClicked(recipe: Recipe) {
         if (recipe.title.isBlank()) {

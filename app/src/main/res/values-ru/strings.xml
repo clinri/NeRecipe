@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="american">Американская</string>
-    <string name="asian">Азиаткая</string>
+    <string name="asian">Азиатская</string>
     <string name="eastern">Восточная</string>
     <string name="pan_asian">Паназиатская</string>
     <string name="mediterranean">Средиземноморская</string>

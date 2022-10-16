@@ -75,6 +75,15 @@ class FeedFavoriteRecipesFragment : FeedRecipesFragment() {
                     }
                 )
         }
+        viewModel.navigateToSingleRecipeFragment.observe(viewLifecycleOwner) {
+            findNavController()
+                .navigate(
+                    R.id.action_feedFavoriteRecipesFragment_to_singleRecipeFragment,
+                    Bundle().apply {
+                        intArg = it
+                    }
+                )
+        }
         binding.feedLayout.fab.setOnClickListener {
             viewModel.onAddClicked()
         }
