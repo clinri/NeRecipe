@@ -8,30 +8,38 @@ import ru.netology.nerecipe.db.RecipeDao
 import ru.netology.nerecipe.db.RecipeEntity
 import ru.netology.nerecipe.db.toEntity
 import ru.netology.nerecipe.db.toModel
-import ru.netology.nerecipe.dto.FilterName
+import ru.netology.nerecipe.dto.KitchenCategory
+import ru.netology.nerecipe.dto.TabName
 import ru.netology.nerecipe.dto.Recipe
 
 class RecipesRepositoryImpl(
     private val dao: RecipeDao,
 ) : RecipesRepository {
     private var text: String = "%"
-    private var modeData = FilterName.ALL
+    private var modeData = TabName.ALL
+    private var filterCategory = KitchenCategory.values().asList()
     override var data = when (modeData) {
-        FilterName.ALL -> getLiveData(dao.getAll(text))
-        FilterName.FAVORITE -> getLiveData(dao.getFavorite(text))
+        TabName.ALL -> getLiveData(dao.getAll(text, filterCategory))
+        TabName.FAVORITE -> getLiveData(dao.getFavorite(text, filterCategory))
     }
 
-    override fun changeDataByFilter(textForSearch: String, filter: FilterName) {
+    override fun changeDataByParams(
+        textForSearch: String,
+        tab: TabName,
+        filterCategory: List<KitchenCategory>,
+    ) {
         val text = textForSearch.ifBlank { "%" }
         println(text)
-        when (filter) {
-            FilterName.ALL -> {
-                modeData = FilterName.ALL
-                data = getLiveData(dao.getAll(text))
+        when (tab) {
+            TabName.ALL -> {
+                modeData = TabName.ALL
+                this.filterCategory = filterCategory
+                data = getLiveData(dao.getAll(text, filterCategory))
             }
-            FilterName.FAVORITE -> {
-                modeData = FilterName.FAVORITE
-                data = getLiveData(dao.getFavorite(text))
+            TabName.FAVORITE -> {
+                modeData = TabName.FAVORITE
+                this.filterCategory = filterCategory
+                data = getLiveData(dao.getFavorite(text, filterCategory))
             }
         }
     }

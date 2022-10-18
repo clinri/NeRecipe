@@ -42,7 +42,7 @@ class FeedFavoriteRecipesFragment : FeedRecipesFragment() {
                 binding.feedLayout.recipesRecyclerView.visibility = View.VISIBLE
             }
         }
-        viewModel.activateSearching.observe(viewLifecycleOwner) {
+        viewModel.activateUpdateDataObserver.observe(viewLifecycleOwner) {
             println("observe activate searching")
             viewModel.data.observe(viewLifecycleOwner) {
                 println("FAV:${f++}")
@@ -58,7 +58,7 @@ class FeedFavoriteRecipesFragment : FeedRecipesFragment() {
                 }
             }
         }
-        viewModel.activateSearching.observe(viewLifecycleOwner) {
+        viewModel.activateUpdateDataObserver.observe(viewLifecycleOwner) {
             println("observe activate searching on Favorite tab")
             viewModel.data.observe(viewLifecycleOwner) {
                 recipesAdapter.submitList(it)

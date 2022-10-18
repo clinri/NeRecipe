@@ -15,7 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.databinding.ActivityAppBinding
-import ru.netology.nerecipe.dto.FilterName
+import ru.netology.nerecipe.dto.TabName
 import ru.netology.nerecipe.util.StringArg
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
@@ -25,7 +25,7 @@ class AppActivity :
     private lateinit var binding: ActivityAppBinding
     private lateinit var navController: NavController
     private val viewModel by viewModels<RecipeViewModel>()
-    private var tabName: FilterName = FilterName.ALL
+    private var tabName: TabName = TabName.ALL
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.app_bar, menu)
@@ -73,11 +73,11 @@ class AppActivity :
                 R.id.newRecipeFragment -> binding.navigationMenu.visibility = View.GONE
                 R.id.listFilterFragment -> binding.navigationMenu.visibility = View.GONE
                 R.id.feedRecipesFragment -> {
-                    tabName = FilterName.ALL
+                    tabName = TabName.ALL
                     binding.navigationMenu.visibility = View.VISIBLE
                 }
                 R.id.feedFavoriteRecipesFragment -> {
-                    tabName = FilterName.FAVORITE
+                    tabName = TabName.FAVORITE
                     binding.navigationMenu.visibility = View.VISIBLE
                 }
                 R.id.singleRecipeFragment -> {
@@ -126,7 +126,7 @@ class AppActivity :
     private fun searchDatabase(query: String) {
         // %" "% because our custom sql query will require that
         val searchQuery = "%$query%"
-        viewModel.searchDatabase(searchQuery, tabName)
+        viewModel.updateDatabaseByParams(searchQuery, tabName)
     }
 
     companion object {

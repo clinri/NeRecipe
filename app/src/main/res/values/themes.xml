@@ -32,7 +32,7 @@
         <item name="iconTint">@color/favorite_toggle_tint</item>
     </style>
 
-    <dimen name="font_icons">12dp</dimen>
+    <dimen name="font_icons">12sp</dimen>
 
 
     <!-- Base application theme. -->

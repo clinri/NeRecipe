@@ -1,13 +1,14 @@
 package ru.netology.nerecipe.viewModel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import ru.netology.nerecipe.adapter.RecipesInteractionListener
 import ru.netology.nerecipe.data.RecipesRepository
 import ru.netology.nerecipe.data.impl.RecipesRepositoryImpl
 import ru.netology.nerecipe.db.AppDb
-import ru.netology.nerecipe.dto.FilterName
+import ru.netology.nerecipe.dto.TabName
 import ru.netology.nerecipe.dto.KitchenCategory
 import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.util.ItemNotFoundExceptions
@@ -20,12 +21,17 @@ open class RecipeViewModel(
         dao = AppDb.getInstance(application).recipeDao
     )
     val data by repository::data
+    val filter: MutableList<Boolean> =
+        KitchenCategory.values().map {
+            true
+        } as MutableList<Boolean>
+
 
     val navigateToNewRecipeFragment = SingleLiveEvent<Int>()
     val navigateToSingleRecipeFragment = SingleLiveEvent<Int>()
     val activateFilterFragment = SingleLiveEvent<Unit>()
     val hideOptionMenu = SingleLiveEvent<Boolean>()
-    val activateSearching = SingleLiveEvent<Unit>()
+    val activateUpdateDataObserver = SingleLiveEvent<Unit>()
 
     private var textForSearch = ""
 
@@ -121,19 +127,46 @@ open class RecipeViewModel(
     }
 
     fun onFavoriteTabClicked() {
-        repository.changeDataByFilter(textForSearch, FilterName.FAVORITE)
+        repository.changeDataByParams(
+            textForSearch,
+            TabName.FAVORITE,
+            getListFilterKitchenCategory()
+        )
     }
 
     fun onAllTabClicked() {
-        repository.changeDataByFilter(textForSearch, FilterName.ALL)
+        repository.changeDataByParams(
+            textForSearch,
+            TabName.ALL,
+            getListFilterKitchenCategory())
     }
 
-//    fun onSearch(text: String) {
-//        activateSearching.value = repository.changeSearchText("$text")
-//    }
+    fun updateDatabaseByParams(searchQuery: String, tab: TabName) {
+        repository.changeDataByParams(
+            searchQuery,
+            tab,
+            getListFilterKitchenCategory()
+        )
+        activateUpdateDataObserver.value = Unit
+    }
 
-    fun searchDatabase(searchQuery: String, filter: FilterName) {
-        repository.changeDataByFilter(searchQuery, filter)
-        activateSearching.value = Unit
+    private fun getListFilterKitchenCategory(): List<KitchenCategory> {
+        val filterCategory = mutableListOf<KitchenCategory>()
+        KitchenCategory.values().forEachIndexed { index, kitchenCategory ->
+            if (filter[index]) filterCategory.add(kitchenCategory)
+        }
+        return filterCategory
+    }
+
+    fun onUpdateButtonClicked() {
+        Log.d("list filter",getListFilterKitchenCategory().toString())
+        activateUpdateDataObserver.value = Unit
+    }
+
+    fun onItemFilterCategoryClicked(index: Int) {
+        Log.d("on item filter clicked", index.toString())
+        Log.d("before click filter[i]=", filter[index].toString())
+        filter[index] = !filter[index]
+        Log.d("after click filter[i]=", filter[index].toString())
     }
 }

@@ -1,12 +1,16 @@
 package ru.netology.nerecipe.data
 
 import androidx.lifecycle.LiveData
-import ru.netology.nerecipe.dto.FilterName
+import ru.netology.nerecipe.dto.KitchenCategory
+import ru.netology.nerecipe.dto.TabName
 import ru.netology.nerecipe.dto.Recipe
 
 interface RecipesRepository {
     val data: LiveData<List<Recipe>>
-    fun changeDataByFilter(textForSearch: String, filter: FilterName)
+    fun changeDataByParams(
+        textForSearch: String,
+        tab: TabName,
+        filterCategory: List<KitchenCategory>)
     fun favorite(recipeId: Int)
     fun delete(recipeId: Int)
     fun insert(recipe: Recipe)

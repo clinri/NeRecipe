@@ -23,5 +23,6 @@
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
         android:paddingLeft="@dimen/small_spacing"
         android:paddingRight="@dimen/small_spacing"
+        android:textSize="@dimen/font_category_edit"
         android:text="hello" />
 </androidx.cardview.widget.CardView>

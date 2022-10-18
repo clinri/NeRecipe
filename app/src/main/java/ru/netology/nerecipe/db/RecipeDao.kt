@@ -9,11 +9,22 @@ import ru.netology.nerecipe.dto.KitchenCategory
 
 @Dao
 interface RecipeDao {
-    @Query("SELECT * FROM recipes WHERE title LIKE :text ORDER BY orderManual DESC")
-    fun getAll(text: String): LiveData<List<RecipeEntity>>
+    @Query("""
+        SELECT * FROM recipes 
+        WHERE title LIKE :text
+        AND category IN (:filterCategory)
+        ORDER BY orderManual DESC
+    """)
+    fun getAll(text: String, filterCategory: List<KitchenCategory>): LiveData<List<RecipeEntity>>
 
-    @Query("SELECT * FROM recipes WHERE title LIKE :text AND favorite = 1 ORDER BY orderManual DESC")
-    fun getFavorite(text: String): LiveData<List<RecipeEntity>>
+    @Query("""
+        SELECT * FROM recipes 
+        WHERE title LIKE :text 
+        AND category IN (:filterCategory)
+        AND favorite = 1 
+        ORDER BY orderManual DESC
+    """)
+    fun getFavorite(text: String,filterCategory: List<KitchenCategory>): LiveData<List<RecipeEntity>>
 
 //    @Query(
 //        """

@@ -47,7 +47,6 @@ class NewRecipeFragment : Fragment() {
             onBackPressedCallback)
 
         binding.ok.setOnClickListener {
-            Log.d("Recipe", (recipe?.id.toString() ?: 0) as String)
             viewModel.onSaveButtonClicked(getEditRecipe(recipe?.id ?: 0))
             findNavController().navigateUp()
         }

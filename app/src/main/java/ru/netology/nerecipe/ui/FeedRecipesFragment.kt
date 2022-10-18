@@ -47,7 +47,7 @@ open class FeedRecipesFragment : Fragment() {
                 binding.recipesRecyclerView.visibility = View.VISIBLE
             }
         }
-        viewModel.activateSearching.observe(viewLifecycleOwner) {
+        viewModel.activateUpdateDataObserver.observe(viewLifecycleOwner) {
             println("observe activate searching on All tab")
             viewModel.data.observe(viewLifecycleOwner) {
                 println("All:${f++}")

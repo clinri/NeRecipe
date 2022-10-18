@@ -1,5 +1,5 @@
 package ru.netology.nerecipe.dto
 
-enum class FilterName {
+enum class TabName {
     ALL,FAVORITE
 }
