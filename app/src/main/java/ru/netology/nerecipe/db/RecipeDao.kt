@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import ru.netology.nerecipe.dto.KitchenCategory
+import ru.netology.nerecipe.dto.Recipe
 
 @Dao
 interface RecipeDao {
@@ -24,15 +25,13 @@ interface RecipeDao {
         AND favorite = 1 
         ORDER BY orderManual DESC
     """)
-    fun getFavorite(text: String,filterCategory: List<KitchenCategory>): LiveData<List<RecipeEntity>>
+    fun getFavorite(
+        text: String,
+        filterCategory: List<KitchenCategory>,
+    ): LiveData<List<RecipeEntity>>
 
-//    @Query(
-//        """
-//        SELECT * FROM recipes
-//        WHERE title LIKE :text AND favorite = 1 ORDER BY orderManual DESC
-//    """
-//    )
-//    fun getFavorite(text: String, category: Category): LiveData<List<RecipeEntity>>
+    @Query("SELECT * FROM recipes WHERE id = :id")
+    fun getRecipeById(id: Int): LiveData<RecipeEntity>
 
     @Insert
     fun insertRecipeAndGetId(recipe: RecipeEntity): Long

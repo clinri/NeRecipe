@@ -56,8 +56,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/author"
-            android:hint="@string/author"
-            android:padding="@dimen/common_spacing" />
+            android:padding="@dimen/common_spacing"
+            android:autofillHints="@string/author"
+            android:inputType="text" />
 
         <TextView
             android:id="@+id/name_title"
@@ -76,7 +77,8 @@
             android:hint="@string/name_of_recipe"
             android:inputType="textMultiLine"
             android:padding="@dimen/common_spacing"
-            app:layout_constraintBottom_toTopOf="@id/bottomAppBar" />
+            app:layout_constraintBottom_toTopOf="@id/bottomAppBar"
+            android:autofillHints="@string/name_of_recipe" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 

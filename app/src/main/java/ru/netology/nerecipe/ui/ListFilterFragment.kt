@@ -17,8 +17,8 @@ import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class ListFilterFragment : Fragment() {
 
-    lateinit var binding: FragmentListFilterBinding
-    lateinit var listCategoryLayout: LinearLayout
+    private lateinit var binding: FragmentListFilterBinding
+    private lateinit var listCategoryLayout: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,

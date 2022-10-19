@@ -46,16 +46,16 @@ open class RecipeViewModel(
     private val currentRecipe = MutableLiveData<Recipe?>(null)
 
     fun onSaveButtonClicked(recipe: Recipe) {
+        Log.d("Saved recipe", recipe.toString())
         if (recipe.title.isBlank()) {
             return
         }
         currentRecipe.value?.also {
-            repository.updateContentById(
+            repository.updateRecipe(
                 it.copy(
                     title = recipe.title,
                     kitchenCategory = recipe.kitchenCategory,
-                    author = recipe.author)
-            )
+                    author = recipe.author))
         } ?: addRecipe(recipe)
         currentRecipe.value = null
     }
@@ -142,6 +142,7 @@ open class RecipeViewModel(
     }
 
     fun updateDatabaseByParams(searchQuery: String, tab: TabName) {
+        textForSearch = searchQuery
         repository.changeDataByParams(
             searchQuery,
             tab,
@@ -159,14 +160,11 @@ open class RecipeViewModel(
     }
 
     fun onUpdateButtonClicked() {
-        Log.d("list filter",getListFilterKitchenCategory().toString())
         activateUpdateDataObserver.value = Unit
     }
 
     fun onItemFilterCategoryClicked(index: Int) {
-        Log.d("on item filter clicked", index.toString())
-        Log.d("before click filter[i]=", filter[index].toString())
+        // action then click on filter item
         filter[index] = !filter[index]
-        Log.d("after click filter[i]=", filter[index].toString())
     }
 }

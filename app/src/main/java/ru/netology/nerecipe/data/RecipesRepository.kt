@@ -10,11 +10,12 @@ interface RecipesRepository {
     fun changeDataByParams(
         textForSearch: String,
         tab: TabName,
-        filterCategory: List<KitchenCategory>)
+        filterCategory: List<KitchenCategory>,
+    )
     fun favorite(recipeId: Int)
     fun delete(recipeId: Int)
     fun insert(recipe: Recipe)
-    fun updateContentById(recipe: Recipe)
+    fun updateRecipe(recipe: Recipe)
     fun swapOrdersByIds(id1: Int, order1: Int, id2: Int, order2: Int)
 
     companion object {

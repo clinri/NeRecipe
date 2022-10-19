@@ -2,7 +2,6 @@ package ru.netology.nerecipe.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import ru.netology.nerecipe.databinding.NewRecipeFragmentBinding
 import ru.netology.nerecipe.dto.KitchenCategory
 import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.ui.FeedRecipesFragment.Companion.intArg
-import ru.netology.nerecipe.util.StringArg
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class NewRecipeFragment : Fragment() {
@@ -31,9 +29,15 @@ class NewRecipeFragment : Fragment() {
     ): View {
         binding = NewRecipeFragmentBinding.inflate(inflater, container, false)
         val viewModel by requireActivity().viewModels<RecipeViewModel>()
+        viewModel.optionMenuIsHidden(true)
 
         val id = arguments?.intArg
-        val recipe = if (id != 0 && id != null) viewModel.getRecipeById(id) else null
+        val recipe = if (id != 0 && id != null) {
+            binding.ok.setImageResource(R.drawable.ic_baseline_update_24dp)
+            viewModel.getRecipeById(id)
+        } else {
+            null
+        }
 
         recipe?.let(::bind) ?: bindSpinner(null)
         binding.title.requestFocus()
@@ -91,11 +95,10 @@ class NewRecipeFragment : Fragment() {
             val list = KitchenCategory.values().map {
                 it.getLabel(requireContext())
             }
-            println("список: $list")
             val adapterCategory = ArrayAdapter(
                 requireContext(), R.layout.spinner_category, list
             )
-            adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             categorySpinner.adapter = adapterCategory
             categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -106,19 +109,14 @@ class NewRecipeFragment : Fragment() {
                 ) {
                     category.text = parent?.getItemAtPosition(position).toString()
                 }
-
                 override fun onNothingSelected(p0: AdapterView<*>?) {
-                    category.text = "Select category"
+                    category.text = getString(R.string.select_kitchen_category)
                 }
             }
             val position: Int = if (kitchenCategory != null) {
                 adapterCategory.getPosition(kitchenCategory)
-            } else 5
+            } else 5 // Russian category
             position.let(categorySpinner::setSelection)
         }
-    }
-
-    companion object {
-        var Bundle.textArg: String? by StringArg
     }
 }

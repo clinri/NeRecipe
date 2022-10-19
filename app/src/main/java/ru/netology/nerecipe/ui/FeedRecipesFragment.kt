@@ -23,21 +23,18 @@ open class FeedRecipesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         val binding = FeedRecipesFragmentBinding.inflate(inflater, container, false)
-        binding.test.text = "feed"
+        binding.test.text = getString(R.string.feed)
 
         val viewModel by requireActivity().viewModels<RecipeViewModel>()
         viewModel.optionMenuIsHidden(false)
         viewModel.onAllTabClicked()
         val recipesAdapter = RecipesAdapter(viewModel)
         binding.recipesRecyclerView.adapter = recipesAdapter
-        var f = 1
         viewModel.data.observe(viewLifecycleOwner) {
-            println("All:${f++}")
             recipesAdapter.submitList(it)
-            println(it)
             if (viewModel.data.value?.isEmpty() == true) {
                 binding.emptyImage.setImageResource(R.raw.empty_plate)
                 binding.emptyImage.visibility = View.VISIBLE
@@ -48,11 +45,9 @@ open class FeedRecipesFragment : Fragment() {
             }
         }
         viewModel.activateUpdateDataObserver.observe(viewLifecycleOwner) {
-            println("observe activate searching on All tab")
+            // reobserve
             viewModel.data.observe(viewLifecycleOwner) {
-                println("All:${f++}")
                 recipesAdapter.submitList(it)
-                println(it)
                 if (viewModel.data.value?.isEmpty() == true) {
                     binding.emptyImage.setImageResource(R.raw.empty_plate)
                     binding.emptyImage.visibility = View.VISIBLE
@@ -85,7 +80,8 @@ open class FeedRecipesFragment : Fragment() {
         binding.fab.setOnClickListener {
             viewModel.onAddClicked()
         }
-//        setupMoveAndSwipeListener
+
+        // setupMoveAndSwipeListener
         val recyclerViewRecipes = binding.recipesRecyclerView
         setupMoveAndSwipeListener(recyclerViewRecipes, viewModel)
         viewModel.activateFilterFragment.observe(viewLifecycleOwner) {
@@ -100,7 +96,7 @@ open class FeedRecipesFragment : Fragment() {
 
     internal fun setupMoveAndSwipeListener(
         recyclerViewRecipes: RecyclerView,
-        viewModel: RecipeViewModel
+        viewModel: RecipeViewModel,
     ) {
         val callback = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
@@ -109,7 +105,7 @@ open class FeedRecipesFragment : Fragment() {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
+                target: RecyclerView.ViewHolder,
             ): Boolean {
                 val item = viewHolder.absoluteAdapterPosition
                 val itemTarget = target.absoluteAdapterPosition

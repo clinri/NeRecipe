@@ -1,7 +1,6 @@
 package ru.netology.nerecipe.dto
 
 import android.content.Context
-import android.content.res.Resources
 import ru.netology.nerecipe.R
 
 enum class KitchenCategory(private val labelId: Int) {

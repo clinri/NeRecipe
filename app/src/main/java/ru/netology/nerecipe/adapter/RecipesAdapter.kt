@@ -2,7 +2,6 @@ package ru.netology.nerecipe.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.livedata.ktx.R
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import ru.netology.nerecipe.databinding.RecipeItemBinding
@@ -12,7 +11,7 @@ class RecipesAdapter(
     private val interactionListener: RecipesInteractionListener
 ) : ListAdapter<Recipe, RecipesViewHolder>(DiffCallback) {
 
-    var onRecipeItemLongClickListener: ((Recipe) -> Unit)? = null
+    private var onRecipeItemLongClickListener: ((Recipe) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipesViewHolder {
         val inflater = LayoutInflater.from(parent.context)

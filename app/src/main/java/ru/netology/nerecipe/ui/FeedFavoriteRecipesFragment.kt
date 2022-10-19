@@ -21,18 +21,15 @@ class FeedFavoriteRecipesFragment : FeedRecipesFragment() {
         savedInstanceState: Bundle?,
     ): View {
         val binding = FragmentFeedFavoriteRecipesBinding.inflate(inflater, container, false)
-        binding.feedLayout.test.text = "favorite"
+        binding.feedLayout.test.text = getString(R.string.favorite)
 
         val viewModel by requireActivity().viewModels<RecipeViewModel>()
         viewModel.optionMenuIsHidden(false)
         viewModel.onFavoriteTabClicked()
         val recipesAdapter = RecipesAdapter(viewModel)
-        var f = 1
         binding.feedLayout.recipesRecyclerView.adapter = recipesAdapter
         viewModel.data.observe(viewLifecycleOwner) {
-            println("FAV:${f++}")
             recipesAdapter.submitList(it)
-            println(it)
             if (viewModel.data.value?.isEmpty() == true) {
                 binding.feedLayout.emptyImage.setImageResource(R.raw.empty_board)
                 binding.feedLayout.emptyImage.visibility = View.VISIBLE
@@ -43,11 +40,8 @@ class FeedFavoriteRecipesFragment : FeedRecipesFragment() {
             }
         }
         viewModel.activateUpdateDataObserver.observe(viewLifecycleOwner) {
-            println("observe activate searching")
             viewModel.data.observe(viewLifecycleOwner) {
-                println("FAV:${f++}")
                 recipesAdapter.submitList(it)
-                println(it)
                 if (viewModel.data.value?.isEmpty() == true) {
                     binding.feedLayout.emptyImage.setImageResource(R.raw.empty_board)
                     binding.feedLayout.emptyImage.visibility = View.VISIBLE
@@ -59,10 +53,9 @@ class FeedFavoriteRecipesFragment : FeedRecipesFragment() {
             }
         }
         viewModel.activateUpdateDataObserver.observe(viewLifecycleOwner) {
-            println("observe activate searching on Favorite tab")
+            // reobserve
             viewModel.data.observe(viewLifecycleOwner) {
                 recipesAdapter.submitList(it)
-                println(it)
             }
         }
 

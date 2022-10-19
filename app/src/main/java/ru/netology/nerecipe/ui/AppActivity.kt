@@ -131,7 +131,5 @@ class AppActivity :
 
     companion object {
         var Bundle.textArg: String? by StringArg
-        const val ALL_TAB = 0
-        const val FAVORITE_TAB = 1
     }
 }
