@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.databinding.NewRecipeFragmentBinding
@@ -21,6 +21,7 @@ import ru.netology.nerecipe.viewModel.RecipeViewModel
 class NewRecipeFragment : Fragment() {
 
     private lateinit var binding: NewRecipeFragmentBinding
+    private val viewModel: RecipeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,7 +29,6 @@ class NewRecipeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         binding = NewRecipeFragmentBinding.inflate(inflater, container, false)
-        val viewModel by requireActivity().viewModels<RecipeViewModel>()
         viewModel.optionMenuIsHidden(true)
 
         val id = arguments?.intArg

@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipesAdapter
@@ -13,6 +13,8 @@ import ru.netology.nerecipe.databinding.FragmentFeedFavoriteRecipesBinding
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class FeedFavoriteRecipesFragment : FeedRecipesFragment() {
+
+    private val viewModel: RecipeViewModel by activityViewModels()
 
     @SuppressLint("ResourceType")
     override fun onCreateView(
@@ -22,8 +24,6 @@ class FeedFavoriteRecipesFragment : FeedRecipesFragment() {
     ): View {
         val binding = FragmentFeedFavoriteRecipesBinding.inflate(inflater, container, false)
         binding.feedLayout.test.text = getString(R.string.favorite)
-
-        val viewModel by requireActivity().viewModels<RecipeViewModel>()
         viewModel.optionMenuIsHidden(false)
         viewModel.onFavoriteTabClicked()
         val recipesAdapter = RecipesAdapter(viewModel)

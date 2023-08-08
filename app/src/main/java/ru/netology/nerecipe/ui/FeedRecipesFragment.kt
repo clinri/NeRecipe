@@ -6,8 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +19,8 @@ import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 open class FeedRecipesFragment : Fragment() {
 
+    private val viewModel: RecipeViewModel by activityViewModels()
+
     @SuppressLint("ResourceType")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,7 +30,6 @@ open class FeedRecipesFragment : Fragment() {
         val binding = FeedRecipesFragmentBinding.inflate(inflater, container, false)
         binding.test.text = getString(R.string.feed)
 
-        val viewModel by requireActivity().viewModels<RecipeViewModel>()
         viewModel.optionMenuIsHidden(false)
         viewModel.onAllTabClicked()
         val recipesAdapter = RecipesAdapter(viewModel)

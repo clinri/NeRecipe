@@ -26,7 +26,7 @@ class AppActivity :
     SearchView.OnQueryTextListener { //, MenuItem.OnActionExpandListener
     private lateinit var binding: ActivityAppBinding
     private lateinit var navController: NavController
-    private val viewModel by viewModels<RecipeViewModel>()
+    private val viewModel: RecipeViewModel by viewModels()
     private var tabName: TabName = TabName.ALL
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -51,6 +51,7 @@ class AppActivity :
                 viewModel.onFilterButtonBarClicked()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -78,13 +79,16 @@ class AppActivity :
                     tabName = TabName.ALL
                     binding.navigationMenu.visibility = View.VISIBLE
                 }
+
                 R.id.feedFavoriteRecipesFragment -> {
                     tabName = TabName.FAVORITE
                     binding.navigationMenu.visibility = View.VISIBLE
                 }
+
                 R.id.singleRecipeFragment -> {
                     binding.navigationMenu.visibility = View.GONE
                 }
+
                 else -> binding.navigationMenu.visibility = View.VISIBLE
             }
         }

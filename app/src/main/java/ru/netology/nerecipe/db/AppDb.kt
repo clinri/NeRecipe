@@ -9,7 +9,8 @@ import androidx.room.TypeConverters
 @TypeConverters(Converters::class)
 @Database(
     entities = [RecipeEntity::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class AppDb : RoomDatabase() {
     abstract val recipeDao: RecipeDao
@@ -20,7 +21,7 @@ abstract class AppDb : RoomDatabase() {
         fun getInstance(context: Context): AppDb {
             return instance ?: synchronized(this) {
                 instance ?: buildDataBase(context)
-                .also { instance = it }
+                    .also { instance = it }
             }
         }
 

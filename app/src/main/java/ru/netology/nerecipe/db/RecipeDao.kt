@@ -6,13 +6,12 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import ru.netology.nerecipe.dto.KitchenCategory
-import ru.netology.nerecipe.dto.Recipe
 
 @Dao
 interface RecipeDao {
     @Query("""
         SELECT * FROM recipes 
-        WHERE title LIKE :text
+        WHERE title LIKE (:text)
         AND category IN (:filterCategory)
         ORDER BY orderManual DESC
     """)
@@ -20,7 +19,7 @@ interface RecipeDao {
 
     @Query("""
         SELECT * FROM recipes 
-        WHERE title LIKE :text 
+        WHERE title LIKE (:text) 
         AND category IN (:filterCategory)
         AND favorite = 1 
         ORDER BY orderManual DESC

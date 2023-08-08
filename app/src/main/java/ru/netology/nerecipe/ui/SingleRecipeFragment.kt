@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.databinding.FragmentSingleRecipeBinding
@@ -18,18 +18,18 @@ import ru.netology.nerecipe.viewModel.RecipeViewModel
 class SingleRecipeFragment : Fragment() {
     private lateinit var binding: FragmentSingleRecipeBinding
     private lateinit var popupMenu: PopupMenu
+    private val viewModel: RecipeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        val viewModel by requireActivity().viewModels<RecipeViewModel>()
         viewModel.optionMenuIsHidden(true)
         binding = FragmentSingleRecipeBinding.inflate(inflater, container, false)
         val id = requireArguments().intArg
         val recipe = viewModel.getRecipeById(id)
         val indexRecipe = viewModel.data.value!!.indexOf(recipe)
-        viewModel.data.observe(viewLifecycleOwner){
+        viewModel.data.observe(viewLifecycleOwner) {
             Log.d("update single recipe", it[indexRecipe].toString())
             it[indexRecipe].let(::bind)
         }
@@ -47,10 +47,12 @@ class SingleRecipeFragment : Fragment() {
                         findNavController().navigateUp()
                         true
                     }
+
                     R.id.edit -> {
                         viewModel.onEditClicked(recipe)
                         true
                     }
+
                     else -> false
                 }
             }

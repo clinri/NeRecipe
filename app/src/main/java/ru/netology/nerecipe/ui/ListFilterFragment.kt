@@ -1,13 +1,13 @@
 package ru.netology.nerecipe.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.LinearLayout
-import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.databinding.FragmentListFilterBinding
@@ -19,6 +19,7 @@ class ListFilterFragment : Fragment() {
 
     private lateinit var binding: FragmentListFilterBinding
     private lateinit var listCategoryLayout: LinearLayout
+    private val viewModel: RecipeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,7 +27,6 @@ class ListFilterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentListFilterBinding.inflate(inflater, container, false)
-        val viewModel by requireActivity().viewModels<RecipeViewModel>()
         viewModel.optionMenuIsHidden(true)
 
         val listCategory = KitchenCategory.values().asList()
