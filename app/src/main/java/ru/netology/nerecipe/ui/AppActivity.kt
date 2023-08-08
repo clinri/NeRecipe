@@ -13,12 +13,14 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.databinding.ActivityAppBinding
 import ru.netology.nerecipe.dto.TabName
 import ru.netology.nerecipe.util.StringArg
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
+@AndroidEntryPoint
 class AppActivity :
     AppCompatActivity(),
     SearchView.OnQueryTextListener { //, MenuItem.OnActionExpandListener
