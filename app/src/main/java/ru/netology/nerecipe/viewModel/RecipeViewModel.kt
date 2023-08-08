@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.netology.nerecipe.adapter.RecipesInteractionListener
 import ru.netology.nerecipe.data.RecipesRepository
 import ru.netology.nerecipe.data.impl.RecipesRepositoryImpl
@@ -13,8 +14,10 @@ import ru.netology.nerecipe.dto.KitchenCategory
 import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.util.ItemNotFoundExceptions
 import ru.netology.nerecipe.util.SingleLiveEvent
+import javax.inject.Inject
 
-open class RecipeViewModel(
+@HiltViewModel
+class RecipeViewModel @Inject constructor(
     application: Application,
 ) : AndroidViewModel(application), RecipesInteractionListener {
     private val repository: RecipesRepository = RecipesRepositoryImpl(
