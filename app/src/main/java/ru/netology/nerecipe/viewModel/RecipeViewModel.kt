@@ -7,11 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.netology.nerecipe.adapter.RecipesInteractionListener
 import ru.netology.nerecipe.data.RecipesRepository
-import ru.netology.nerecipe.data.impl.RecipesRepositoryImpl
-import ru.netology.nerecipe.db.AppDb
-import ru.netology.nerecipe.dto.TabName
 import ru.netology.nerecipe.dto.KitchenCategory
 import ru.netology.nerecipe.dto.Recipe
+import ru.netology.nerecipe.dto.TabName
 import ru.netology.nerecipe.util.ItemNotFoundExceptions
 import ru.netology.nerecipe.util.SingleLiveEvent
 import javax.inject.Inject
@@ -19,10 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RecipeViewModel @Inject constructor(
     application: Application,
+    private val repository: RecipesRepository
 ) : AndroidViewModel(application), RecipesInteractionListener {
-    private val repository: RecipesRepository = RecipesRepositoryImpl(
-        dao = AppDb.getInstance(application).recipeDao
-    )
     val data by repository::data
     val filter: MutableList<Boolean> =
         KitchenCategory.values().map {

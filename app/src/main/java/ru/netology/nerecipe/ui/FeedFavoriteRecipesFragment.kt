@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipesAdapter
 import ru.netology.nerecipe.databinding.FragmentFeedFavoriteRecipesBinding
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
+@AndroidEntryPoint
 class FeedFavoriteRecipesFragment : FeedRecipesFragment() {
 
     private val viewModel: RecipeViewModel by activityViewModels()

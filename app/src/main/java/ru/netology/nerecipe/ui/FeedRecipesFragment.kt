@@ -11,12 +11,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipesAdapter
 import ru.netology.nerecipe.databinding.FeedRecipesFragmentBinding
 import ru.netology.nerecipe.util.IntArg
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
+@AndroidEntryPoint
 open class FeedRecipesFragment : Fragment() {
 
     private val viewModel: RecipeViewModel by activityViewModels()

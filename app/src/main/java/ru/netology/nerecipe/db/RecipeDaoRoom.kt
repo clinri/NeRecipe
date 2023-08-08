@@ -8,7 +8,7 @@ import androidx.room.Transaction
 import ru.netology.nerecipe.dto.KitchenCategory
 
 @Dao
-interface RecipeDao {
+interface RecipeDaoRoom {
     @Query("""
         SELECT * FROM recipes 
         WHERE title LIKE (:text)

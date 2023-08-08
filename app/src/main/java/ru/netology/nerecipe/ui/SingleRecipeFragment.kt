@@ -9,12 +9,14 @@ import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.databinding.FragmentSingleRecipeBinding
 import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.ui.FeedRecipesFragment.Companion.intArg
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
+@AndroidEntryPoint
 class SingleRecipeFragment : Fragment() {
     private lateinit var binding: FragmentSingleRecipeBinding
     private lateinit var popupMenu: PopupMenu

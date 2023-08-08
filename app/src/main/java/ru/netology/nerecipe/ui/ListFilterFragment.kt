@@ -9,12 +9,13 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.databinding.FragmentListFilterBinding
 import ru.netology.nerecipe.dto.KitchenCategory
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
-
+@AndroidEntryPoint
 class ListFilterFragment : Fragment() {
 
     private lateinit var binding: FragmentListFilterBinding

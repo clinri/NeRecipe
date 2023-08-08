@@ -2,19 +2,19 @@ package ru.netology.nerecipe.data.impl
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import ru.netology.nerecipe.data.RecipesRepository
-import ru.netology.nerecipe.db.RecipeDao
+import ru.netology.nerecipe.db.RecipeDaoRoom
 import ru.netology.nerecipe.db.RecipeEntity
 import ru.netology.nerecipe.db.toEntity
 import ru.netology.nerecipe.db.toModel
 import ru.netology.nerecipe.dto.KitchenCategory
 import ru.netology.nerecipe.dto.TabName
 import ru.netology.nerecipe.dto.Recipe
+import javax.inject.Inject
 
-class RecipesRepositoryImpl(
-    private val dao: RecipeDao,
+class RecipesRepositoryImpl @Inject constructor(
+    private val dao: RecipeDaoRoom,
 ) : RecipesRepository {
     private var textForSearch: String = "%"
     private var modeData = TabName.ALL

@@ -11,6 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.databinding.NewRecipeFragmentBinding
 import ru.netology.nerecipe.dto.KitchenCategory
@@ -18,6 +19,7 @@ import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.ui.FeedRecipesFragment.Companion.intArg
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
+@AndroidEntryPoint
 class NewRecipeFragment : Fragment() {
 
     private lateinit var binding: NewRecipeFragmentBinding
